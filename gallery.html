@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>গ্যালারি | M K Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="page-hero"><div class="container"><div class="crumb">হোম › গ্যালারি</div><h2>ফটো গ্যালারি</h2><p>আমাদের স্কুলের কিছু সুন্দর মুহূর্ত</p></div></div>
+
+<section>
+  <div class="container">
+    <div class="filters" id="filters">
+      <button class="on" data-f="all">সব</button>
+      <button data-f="event">অনুষ্ঠান</button>
+      <button data-f="students">শিক্ষার্থী</button>
+      <button data-f="compete">প্রতিযোগিতা</button>
+      <button data-f="banner">প্রচার</button>
+    </div>
+    <div class="gallery" id="gallery"></div>
+    <p style="text-align:center;color:var(--muted);margin-top:26px;font-size:.9rem">আরও ছবি যোগ করতে images ফোল্ডারে ছবি রেখে gallery.html-এর items তালিকায় একটি লাইন যোগ করুন।</p>
+  </div>
+</section>
+
+<div class="lightbox" id="lb"><span class="x" onclick="this.parentNode.classList.remove('open')">×</span><div id="lbc"></div></div>
+
+<script src="common.js"></script>
+<script>
+const items=[
+ {c:"banner",t:"প্রসপেক্টাস ও ভর্তি",s:"images/slide1.jpg"},
+ {c:"banner",t:"এম.কে. অ্যাকাডেমী",s:"images/slide2.jpg"},
+ {c:"banner",t:"আমাদের শিক্ষকবৃন্দ",s:"images/slide3.jpg"},
+ {c:"event",t:"শিক্ষক দিবস উদযাপন",s:"images/g1.jpg"},
+ {c:"event",t:"শিক্ষক দিবস উদযাপন",s:"images/g2.jpg"},
+ {c:"event",t:"শিক্ষক দিবস উদযাপন",s:"images/g3.jpg"},
+ {c:"event",t:"শিক্ষক দিবস উদযাপন",s:"images/g4.jpg"},
+ {c:"compete",t:"ম্যাথ কম্পিটিশনের উপহার",s:"images/g5.jpg"},
+ {c:"event",t:"শিক্ষক দিবস উদযাপন",s:"images/g6.jpg"},
+ {c:"students",t:"আমাদের শিক্ষার্থীরা",s:"images/g7.jpg"},
+ {c:"compete",t:"অ্যাবাকাস প্রতিযোগিতায় সাফল্য",s:"images/g8.jpg"},
+ {c:"compete",t:"ম্যাথ কম্পিটিশনের উপহার",s:"images/g9.jpg"}
+];
+const g=document.getElementById("gallery"),lb=document.getElementById("lb"),lbc=document.getElementById("lbc");
+g.innerHTML=items.map((x,n)=>`<div class="g-item reveal" data-c="${x.c}"><img src="${x.s}" alt="${x.t}" loading="lazy"><div class="cap">${x.t}</div></div>`).join("");
+g.addEventListener("click",e=>{const it=e.target.closest(".g-item");if(!it)return;const im=it.querySelector("img");
+  lbc.innerHTML=`<img src="${im.src}" alt="">`;lb.classList.add("open")});
+lb.addEventListener("click",e=>{if(e.target===lb)lb.classList.remove("open")});
+document.getElementById("filters").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
+  document.querySelectorAll("#filters button").forEach(x=>x.classList.remove("on"));b.classList.add("on");
+  document.querySelectorAll(".g-item").forEach(i=>i.style.display=(b.dataset.f==="all"||i.dataset.c===b.dataset.f)?"":"none")});
+document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

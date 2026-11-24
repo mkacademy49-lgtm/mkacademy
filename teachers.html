@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>শিক্ষকবৃন্দ | M K Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="page-hero"><div class="container"><div class="crumb">হোম › শিক্ষকবৃন্দ</div><h2>আমাদের শিক্ষক-শিক্ষিকা</h2><p>শিক্ষক নির্বাচনে আমাদের গুরুত্ব: কোয়ালিটি, কোয়ালিফিকেশন ও এক্সপেরিয়েন্স</p></div></div>
+
+<section>
+  <div class="container">
+    <div class="sec-head reveal"><span class="tag">নেতৃত্ব</span><h2>পরিচালনা ও প্রধান শিক্ষক</h2><div class="bar"></div></div>
+    <div class="leaders">
+      <div class="leader reveal">
+        <div class="ph"><img src="images/lead1.jpg" alt="মোঃ খাবিরুদ্দিন সেখ"></div>
+        <h3>মোঃ খাবিরুদ্দিন সেখ</h3>
+        <span class="role">পরিচালক</span>
+        <p>প্রতিষ্ঠানের সার্বিক পরিচালনা ও উন্নয়নের দায়িত্বে।</p>
+      </div>
+      <div class="leader reveal">
+        <div class="ph"><img src="images/lead2.jpg" alt="মোঃ ফজলুল হক (বাবু)"></div>
+        <h3>মোঃ ফজলুল হক (বাবু)</h3>
+        <span class="role">প্রধান শিক্ষক · B-Tech</span>
+        <p>শিক্ষাদান ও একাডেমিক কার্যক্রমের তত্ত্বাবধানে।</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background:#fff">
+  <div class="container">
+    <div class="sec-head reveal"><span class="tag">আমাদের টিম</span><h2>শিক্ষকবৃন্দ</h2><p>অভিজ্ঞ ও যোগ্য শিক্ষক-শিক্ষিকারা প্রতিটি শিক্ষার্থীর পাশে আছেন।</p><div class="bar"></div></div>
+    <div class="t-grid" id="tg"></div>
+  </div>
+</section>
+
+<section style="padding-top:60px">
+  <div class="container"><div class="cta-band reveal"><h2>আমাদের পরিবারের অংশ হন</h2><p>আপনার সন্তানের ভর্তির আবেদন আজই করুন।</p><a href="admission.html" class="btn btn-gold">অনলাইন ভর্তি →</a></div></div>
+</section>
+
+<script src="common.js"></script>
+<script>
+const g=document.getElementById("tg");
+for(let i=1;i<=14;i++){g.insertAdjacentHTML("beforeend",`<div class="t-card reveal"><img src="images/t${i}.jpg" alt="শিক্ষক ${i}" loading="lazy"></div>`);}
+document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

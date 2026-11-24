@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>যোগাযোগ | M K Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="page-hero"><div class="container"><div class="crumb">হোম › যোগাযোগ</div><h2>যোগাযোগ করুন</h2><p>যেকোনো প্রশ্নে আমরা সবসময় পাশে আছি</p></div></div>
+
+<section>
+  <div class="container">
+    <div class="contact-grid">
+      <div class="info-box reveal">
+        <h3>আমাদের ঠিকানা</h3>
+        <div class="info-item"><div class="ic">📍</div><div><b>ঠিকানা</b><br>মালঞ্চা (ভরাগাছি হাই স্কুলের নিকটে),<br>শমসেরগঞ্জ, মুর্শিদাবাদ</div></div>
+        <div class="info-item"><div class="ic">📞</div><div><b>মোবাইল</b><br><a href="tel:+917001310351">7001310351</a> / <a href="tel:+919475769100">9475769100</a></div></div>
+        <div class="info-item"><div class="ic">💬</div><div><b>WhatsApp</b><br><a href="https://wa.me/917001310351" target="_blank">মেসেজ পাঠান</a></div></div>
+        <div class="info-item"><div class="ic">🕘</div><div><b>অফিস সময়</b><br>সকাল ৯টা – বিকাল ৪টা</div></div>
+        <a href="tel:+917001310351" class="btn btn-gold" style="margin-top:6px">📞 এখনই কল করুন</a>
+      </div>
+
+      <form class="form-wrap reveal" style="margin-top:0" id="cf">
+        <h3 style="color:var(--navy);margin-bottom:18px">আমাদের মেসেজ পাঠান</h3>
+        <div class="row">
+          <div class="f"><label>আপনার নাম</label><input id="cn" required></div>
+          <div class="f"><label>মোবাইল নম্বর</label><input id="cp" type="tel" required></div>
+          <div class="f full"><label>আপনার বার্তা</label><textarea id="cm" rows="5" required></textarea></div>
+        </div>
+        <button class="btn btn-navy" style="margin-top:18px">WhatsApp-এ পাঠান →</button>
+      </form>
+    </div>
+
+    <div class="map reveal"><iframe loading="lazy" src="https://maps.google.com/maps?q=Samsherganj%2C%20Murshidabad&output=embed"></iframe></div>
+  </div>
+</section>
+
+<script src="common.js"></script>
+<script>
+document.getElementById("cf").addEventListener("submit",e=>{e.preventDefault();
+ const t=`নমস্কার, আমি ${cn.value}। মোবাইল: ${cp.value}\n${cm.value}`;
+ open("https://wa.me/91"+SCHOOL.phone+"?text="+encodeURIComponent(t),"_blank")});
+</script>
+</body>
+</html>
