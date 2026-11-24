@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>অনলাইন ভর্তি | M K Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.adm-hero{position:relative;overflow:hidden;color:#fff;text-align:center;padding:64px 0 120px;background:linear-gradient(130deg,#06193d,var(--navy) 55%,#1e57b8)}
+.adm-hero:before{content:"";position:absolute;width:480px;height:480px;border-radius:50%;right:-120px;top:-200px;background:radial-gradient(circle,rgba(245,179,1,.35),transparent 68%)}
+.adm-hero:after{content:"";position:absolute;width:360px;height:360px;border-radius:50%;left:-110px;bottom:-190px;background:radial-gradient(circle,rgba(230,34,138,.28),transparent 68%)}
+.adm-hero .container{position:relative;z-index:2}
+.adm-hero h2{font-size:clamp(1.9rem,4.5vw,3rem);margin:12px 0 8px;font-weight:800}
+.adm-hero p{color:#cfdcf7;max-width:620px;margin:0 auto}
+.pills{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+.pills span{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);border-radius:50px;padding:6px 16px;font-size:.85rem}
+.adm-wrap{display:grid;grid-template-columns:1fr 340px;gap:28px;margin-top:-70px;position:relative;z-index:5;align-items:start;padding-bottom:70px}
+.adm-card{background:#fff;border-radius:26px;box-shadow:0 18px 50px rgba(11,42,91,.16);overflow:hidden}
+/* stepper */
+.stepper{display:flex;justify-content:space-between;position:relative;padding:28px 34px 22px;background:linear-gradient(180deg,#f3f7ff,#fff);border-bottom:1px solid #e8eefb}
+.stepper:before{content:"";position:absolute;left:68px;right:68px;top:49px;height:4px;background:#dde6f7;border-radius:4px}
+.stepper .bar{position:absolute;left:68px;top:49px;height:4px;background:linear-gradient(90deg,var(--gold),var(--red));border-radius:4px;transition:width .5s;width:0}
+.st{position:relative;z-index:2;text-align:center;flex:1}
+.st i{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;margin:0 auto 8px;background:#fff;border:3px solid #dde6f7;color:#8da0c4;font-style:normal;font-weight:700;transition:.3s}
+.st small{display:block;font-size:.78rem;color:var(--muted);font-weight:600}
+.st.on i{border-color:var(--gold);color:var(--navy);box-shadow:0 0 0 6px rgba(245,179,1,.2)}
+.st.on small{color:var(--navy)}
+.st.done i{background:#1faa59;border-color:#1faa59;color:#fff}
+.step{display:none;padding:32px 34px 10px;animation:fade .4s}
+.step.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.step h3{color:var(--navy);font-size:1.3rem;margin-bottom:4px}
+.step .sub{color:var(--muted);font-size:.92rem;margin-bottom:22px}
+.adm-card .f input,.adm-card .f select,.adm-card .f textarea{background:#f8faff}
+.nav-btns{display:flex;justify-content:space-between;gap:12px;padding:10px 34px 34px;flex-wrap:wrap}
+.btn-line{background:#fff;border:2px solid #cdd8ee;color:var(--navy)}
+.btn-line:hover{border-color:var(--navy)}
+/* uploads */
+.up-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.dz{position:relative;border:2px dashed #b7c6e4;border-radius:18px;padding:18px;background:#f8faff;transition:.25s;cursor:pointer;display:flex;gap:14px;align-items:center;min-height:104px}
+.dz:hover,.dz.drag{border-color:var(--navy2);background:#eef4ff}
+.dz.has{border-style:solid;border-color:#1faa59;background:#f2fbf6}
+.dz .ico{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#e9f0ff,#fff1c7);display:grid;place-items:center;font-size:1.6rem;flex-shrink:0;overflow:hidden}
+.dz .ico img{width:100%;height:100%;object-fit:cover}
+.dz b{display:block;color:var(--navy);font-size:.95rem;line-height:1.3}
+.dz b em{color:var(--red);font-style:normal}
+.dz span{display:block;font-size:.78rem;color:var(--muted);word-break:break-all}
+.dz input{display:none}
+.dz .rm{position:absolute;top:8px;right:8px;width:26px;height:26px;border-radius:50%;border:0;background:#fde4e4;color:#c0392b;font-weight:700;cursor:pointer;display:none}
+.dz.has .rm{display:block}
+.f input.bad,.f select.bad{border-color:#c0392b!important;background:#fff3f2!important;box-shadow:0 0 0 4px rgba(192,57,43,.12)}
+.err{color:#c0392b;font-size:.85rem;margin-top:10px;min-height:1.2em;font-weight:600}
+/* review */
+.rv{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.rv div{background:#f6f9ff;border-radius:14px;padding:12px 16px;border:1px solid #e3ebfb}
+.rv small{display:block;color:var(--muted);font-size:.75rem}
+.rv b{color:var(--navy);word-break:break-word}
+.agree{background:#fff8e1;border:1px solid #ffe29a;border-radius:14px;padding:14px 16px;color:var(--ink)}
+/* aside */
+.aside{position:sticky;top:96px;display:grid;gap:20px}
+.a-card{background:#fff;border-radius:22px;box-shadow:var(--shadow);padding:26px}
+.a-card h4{color:var(--navy);margin-bottom:12px;font-size:1.05rem}
+.a-card ul{list-style:none}
+.a-card li{padding:7px 0 7px 30px;position:relative;font-size:.92rem;border-bottom:1px dashed #e3ebfb}
+.a-card li:last-child{border:0}
+.a-card li:before{content:"📄";position:absolute;left:0}
+.a-dark{background:linear-gradient(150deg,var(--navy),#1e57b8);color:#fff}
+.a-dark h4{color:var(--gold2)}
+.a-dark a.btn{display:block;text-align:center;margin-top:10px;padding:11px}
+@media(max-width:960px){.adm-wrap{grid-template-columns:1fr}.aside{position:static;order:2}.stepper{padding:22px 10px 16px}.stepper:before,.stepper .bar{left:40px}.stepper:before{right:40px}.step,.nav-btns{padding-left:18px;padding-right:18px}.st small{font-size:.66rem}}
+@media print{.doc-page{break-before:page;page-break-before:always}.doc-page img{max-width:100%;max-height:230mm;margin:8px auto;border:1px solid #999}}
+.doc-page h3{color:var(--navy);margin:18px 0 6px}
+.doc-page .dp{margin-bottom:18px}
+.doc-page img{max-width:100%;max-height:560px;display:block;margin:8px 0;border:1px solid #cdd8ee;border-radius:6px}
+</style>
+</head>
+<body>
+
+<div id="formArea">
+<div class="adm-hero no-print"><div class="container">
+  <span class="badge">🎓 অনলাইন ভর্তি</span>
+  <h2>M K Academy-তে ভর্তির আবেদন</h2>
+  <p>ঘরে বসে ৪টি সহজ ধাপে আবেদন করুন। জমা দেওয়ার সঙ্গে সঙ্গে প্রিন্ট কপি পাবেন।</p>
+  <div class="pills"><span id="sess">ভর্তি সেশন</span><span>নার্সারি থেকে ক্লাস ১২</span><span>৫ মিনিটে সম্পূর্ণ</span></div>
+</div></div>
+
+<div class="container adm-wrap">
+  <form class="adm-card" id="admForm" novalidate>
+    <div class="stepper" id="stepper">
+      <div class="bar" id="sbar"></div>
+      <div class="st on"><i>১</i><small>শিক্ষার্থী</small></div>
+      <div class="st"><i>২</i><small>অভিভাবক ও ঠিকানা</small></div>
+      <div class="st"><i>৩</i><small>ডকুমেন্ট</small></div>
+      <div class="st"><i>৪</i><small>যাচাই ও জমা</small></div>
+    </div>
+
+    <!-- ধাপ ১ -->
+    <div class="step active" data-s="0">
+      <h3>শিক্ষার্থীর তথ্য</h3><p class="sub">নাম ও জন্ম তারিখ জন্মসনদ অনুযায়ী লিখুন।</p>
+      <div class="row">
+        <div class="f"><label>শিক্ষার্থীর পূর্ণ নাম <i>*</i></label><input name="studentName" required placeholder="যেমন: Md Rahim Sk"></div>
+        <div class="f"><label>জন্ম তারিখ <i>*</i></label><input type="date" name="dob" required></div>
+        <div class="f"><label>লিঙ্গ <i>*</i></label><select name="gender" required><option value="">নির্বাচন করুন</option><option>ছেলে</option><option>মেয়ে</option><option>অন্যান্য</option></select></div>
+        <div class="f"><label>কোন শ্রেণিতে ভর্তি চায় <i>*</i></label>
+          <select name="classApplied" required><option value="">নির্বাচন করুন</option>
+          <option>Nursery</option><option>KG</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option><option>Class 11</option><option>Class 12</option></select></div>
+        <div class="f"><label>রক্তের গ্রুপ</label><select name="blood"><option value="">জানা নেই</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>O+</option><option>O-</option><option>AB+</option><option>AB-</option></select></div>
+        <div class="f"><label>ধর্ম</label><input name="religion"></div>
+        <div class="f"><label>আধার নম্বর (ঐচ্ছিক)</label><input name="aadhaar" inputmode="numeric" maxlength="12" pattern="[0-9]{12}" placeholder="12 digit"></div>
+        <div class="f"><label>আগের স্কুলের নাম (যদি থাকে)</label><input name="prevSchool"></div>
+        <div class="f"><label>আগে কোন ক্লাসে পড়ত</label><input name="prevClass" placeholder="যেমন: Class 4"></div>
+        <div class="f"><label>শেষ পরীক্ষায় প্রাপ্ত নম্বর (%)</label><input name="percent" inputmode="decimal" placeholder="যেমন: 78"></div>
+      </div>
+    </div>
+
+    <!-- ধাপ ২ -->
+    <div class="step" data-s="1">
+      <h3>অভিভাবক ও ঠিকানা</h3><p class="sub">আবেদন সংক্রান্ত যোগাযোগ এই মোবাইল নম্বরে করা হবে।</p>
+      <div class="row">
+        <div class="f"><label>পিতার নাম <i>*</i></label><input name="father" required></div>
+        <div class="f"><label>মাতার নাম <i>*</i></label><input name="mother" required></div>
+        <div class="f"><label>অভিভাবকের পেশা</label><input name="occupation"></div>
+        <div class="f"><label>মোবাইল নম্বর <i>*</i></label><input type="tel" name="mobile" pattern="[0-9]{10}" maxlength="10" required placeholder="10 digit"></div>
+        <div class="f"><label>বিকল্প মোবাইল</label><input type="tel" name="mobile2" maxlength="10" pattern="[0-9]{10}"></div>
+        <div class="f"><label>ইমেইল (ঐচ্ছিক)</label><input type="email" name="email"></div>
+        <div class="f"><label>গ্রাম / পাড়া <i>*</i></label><input name="village" required></div>
+        <div class="f"><label>পোস্ট অফিস <i>*</i></label><input name="po" required></div>
+        <div class="f"><label>থানা</label><input name="ps" value="Samsherganj"></div>
+        <div class="f"><label>জেলা</label><input name="district" value="Murshidabad"></div>
+        <div class="f"><label>পিন কোড</label><input name="pin" maxlength="6" inputmode="numeric"></div>
+      </div>
+    </div>
+
+    <!-- ধাপ ৩ -->
+    <div class="step" data-s="2">
+      <h3>ডকুমেন্ট আপলোড</h3><p class="sub">ছবি (JPG/PNG) বা PDF দিন। <b>*</b> চিহ্নিতগুলো আবশ্যক। ছবি আপনা-আপনি ছোট করে নেওয়া হবে।</p>
+      <div class="up-grid" id="ups"></div>
+      <div class="err" id="upErr"></div>
+    </div>
+
+    <!-- ধাপ ৪ -->
+    <div class="step" data-s="3">
+      <h3>তথ্য যাচাই করুন</h3><p class="sub">নিচের তথ্য ঠিক আছে কিনা দেখে নিন। ভুল থাকলে "পিছনে" গিয়ে সংশোধন করুন।</p>
+      <div class="rv" id="rv"></div>
+      <label class="agree" style="display:flex;gap:10px;margin-top:20px;cursor:pointer"><input type="checkbox" id="agree" style="margin-top:5px"> আমি ঘোষণা করছি যে উপরের সমস্ত তথ্য ও ডকুমেন্ট সত্য ও সঠিক।</label>
+      <div class="err" id="agErr"></div>
+    </div>
+
+    <div class="nav-btns">
+      <button type="button" class="btn btn-line" id="bPrev" style="visibility:hidden">← পিছনে</button>
+      <button type="button" class="btn btn-navy" id="bNext">পরবর্তী ধাপ →</button>
+      <button type="submit" class="btn btn-gold" id="bSubmit" style="display:none">✅ আবেদন জমা দিন</button>
+    </div>
+  </form>
+
+  <aside class="aside no-print">
+    <div class="a-card"><h4>প্রয়োজনীয় কাগজপত্র</h4><ul>
+      <li>শিক্ষার্থীর ছবি <b style="color:var(--red)">*</b></li>
+      <li>জন্ম সনদ <b style="color:var(--red)">*</b></li>
+      <li>আগের স্কুলের TC / ছাড়পত্র</li>
+      <li>আগের ক্লাসের মার্কশিট</li>
+      <li>আধার কার্ড</li>
+      <li>অভিভাবকের পরিচয়পত্র</li>
+    </ul></div>
+    <div class="a-card a-dark"><h4>সাহায্য লাগবে?</h4><p style="font-size:.9rem;color:#dbe6ff">ফর্ম পূরণে সমস্যা হলে সরাসরি যোগাযোগ করুন।</p>
+      <a class="btn btn-gold" href="tel:+917001310351">📞 7001310351</a>
+      <a class="btn btn-ghost" href="tel:+919475769100">📞 9475769100</a></div>
+  </aside>
+</div>
+</div>
+
+<!-- ======= প্রিন্টযোগ্য রসিদ ======= -->
+<div id="receipt"><div class="container" style="padding:40px 0">
+  <div class="success no-print"><div class="tick">✓</div><h2 style="color:var(--navy)">আবেদন সফলভাবে জমা হয়েছে!</h2><p>নিচের কপিটি প্রিন্ট করে ডকুমেন্টসহ স্কুলে জমা দিন।</p></div>
+  <div class="r-actions"><button class="btn btn-navy" onclick="window.print()">🖨️ প্রিন্ট করুন / PDF সেভ করুন</button><a class="btn btn-gold" href="admission.html">নতুন আবেদন</a></div>
+  <div class="receipt" id="rbody"></div>
+  <div class="receipt doc-page" id="rdocs" style="margin-top:24px"></div>
+</div></div>
+
+<script src="common.js"></script>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const now=new Date(), SESSION=(now.getMonth()>=9?now.getFullYear()+1:now.getFullYear());
+$("#sess").textContent="ভর্তি সেশন "+SESSION;
+
+/* ---- ডকুমেন্ট বক্স ---- */
+const DEFS=[
+ {k:"photo",l:"শিক্ষার্থীর ছবি",req:1,ic:"🧑‍🎓",acc:"image/*",h:"পাসপোর্ট সাইজ, JPG/PNG"},
+ {k:"birth",l:"জন্ম সনদ (Birth Certificate)",req:1,ic:"📜",acc:"image/*,application/pdf",h:"ছবি বা PDF"},
+ {k:"tc",l:"আগের স্কুলের TC / ছাড়পত্র",ic:"📄",acc:"image/*,application/pdf",h:"থাকলে দিন"},
+ {k:"marks",l:"আগের ক্লাসের মার্কশিট",ic:"📝",acc:"image/*,application/pdf",h:"থাকলে দিন"},
+ {k:"aadhaar",l:"শিক্ষার্থীর আধার কার্ড",ic:"🪪",acc:"image/*,application/pdf",h:"ঐচ্ছিক"},
+ {k:"parentId",l:"অভিভাবকের পরিচয়পত্র",ic:"🆔",acc:"image/*,application/pdf",h:"আধার / ভোটার কার্ড"}
+];
+const docs={};
+$("#ups").innerHTML=DEFS.map(d=>`<label class="dz" id="dz-${d.k}">
+  <div class="ico" id="ic-${d.k}">${d.ic}</div>
+  <div><b>${d.l} ${d.req?"<em>*</em>":""}</b><span id="nm-${d.k}">${d.h} · ক্লিক বা ড্র্যাগ করুন</span></div>
+  <button type="button" class="rm" aria-label="মুছুন" id="rm-${d.k}">×</button>
+  <input type="file" id="fi-${d.k}" accept="${d.acc}"></label>`).join("");
+
+function compress(file){return new Promise((res,rej)=>{
+  if(file.type==="application/pdf"){
+    if(file.size>2*1024*1024)return rej("PDF ফাইল ২ MB-এর কম হতে হবে।");
+    const r=new FileReader();r.onload=()=>res({name:file.name,type:file.type,data:r.result});r.readAsDataURL(file);return;}
+  if(!file.type.startsWith("image/"))return rej("শুধু ছবি বা PDF দিন।");
+  const r=new FileReader();
+  r.onload=e=>{const im=new Image();im.onload=()=>{
+    const m=1200,s=Math.min(1,m/Math.max(im.width,im.height));
+    const c=document.createElement("canvas");c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);
+    c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+    res({name:file.name.replace(/\.[^.]+$/,"")+".jpg",type:"image/jpeg",data:c.toDataURL("image/jpeg",.78)});};
+    im.onerror=()=>rej("ছবিটি পড়া যায়নি।");im.src=e.target.result;};
+  r.readAsDataURL(file);});}
+
+function paint(k){
+  const d=docs[k],dz=$("#dz-"+k),def=DEFS.find(x=>x.k===k);
+  dz.classList.toggle("has",!!d);
+  $("#ic-"+k).innerHTML=d?(d.type.startsWith("image")?`<img src="${d.data}" alt="">`:"📕"):def.ic;
+  $("#nm-"+k).textContent=d?"✓ "+d.name:def.h+" · ক্লিক বা ড্র্যাগ করুন";
+}
+DEFS.forEach(d=>{
+  const dz=$("#dz-"+d.k),fi=$("#fi-"+d.k);
+  async function take(f){ if(!f)return; $("#upErr").textContent="";
+    try{docs[d.k]=await compress(f);paint(d.k);}catch(e){$("#upErr").textContent=e;} }
+  fi.addEventListener("change",()=>take(fi.files[0]));
+  $("#rm-"+d.k).addEventListener("click",e=>{e.preventDefault();e.stopPropagation();delete docs[d.k];fi.value="";paint(d.k);});
+  ["dragenter","dragover"].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.add("drag")}));
+  ["dragleave","drop"].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.remove("drag")}));
+  dz.addEventListener("drop",e=>take(e.dataTransfer.files[0]));
+});
+
+/* ---- ধাপ ---- */
+let stepNo=0;const steps=$$(".step"),sts=$$(".st");
+function show(n){stepNo=n;
+  steps.forEach((s,i)=>s.classList.toggle("active",i===n));
+  sts.forEach((s,i)=>{s.classList.toggle("on",i===n);s.classList.toggle("done",i<n);s.querySelector("i").textContent=i<n?"✓":["১","২","৩","৪"][i];});
+  $("#sbar").style.width=`calc((100% - 136px) * ${n/3})`;
+  $("#bPrev").style.visibility=n?"visible":"hidden";
+  $("#bNext").style.display=n===3?"none":"";
+  $("#bSubmit").style.display=n===3?"":"none";
+  if(n===3)buildReview();
+  window.scrollTo({top:document.querySelector(".adm-wrap").offsetTop+60,behavior:"smooth"});}
+function validStep(n){
+  if(n<2){
+    steps[n].querySelectorAll(".bad").forEach(x=>x.classList.remove("bad"));
+    const bad=[...steps[n].querySelectorAll("input,select")].filter(el=>!el.checkValidity());
+    if(bad.length){
+      bad.forEach(el=>el.classList.add("bad"));
+      const names=bad.map(el=>{const l=el.closest(".f")&&el.closest(".f").querySelector("label");return l?l.textContent.replace("*","").trim():el.name});
+      $("#err"+n).textContent="⚠ এই ঘরগুলো পূরণ বা ঠিক করুন (লাল দাগ দেওয়া): "+names.join(", ");
+      bad[0].scrollIntoView({behavior:"smooth",block:"center"});
+      return false;}
+    $("#err"+n).textContent="";return true;}
+  if(n===2){const miss=DEFS.filter(d=>d.req&&!docs[d.k]).map(d=>d.l);
+    if(miss.length){$("#upErr").textContent="আবশ্যক ডকুমেন্ট বাকি: "+miss.join(", ");return false;}$("#upErr").textContent="";}
+  return true;}
+$("#bNext").addEventListener("click",()=>{if(validStep(stepNo))show(stepNo+1)});
+$("#bPrev").addEventListener("click",()=>show(stepNo-1));
+
+const LBL={studentName:"শিক্ষার্থীর নাম",dob:"জন্ম তারিখ",gender:"লিঙ্গ",classApplied:"ভর্তির শ্রেণি",blood:"রক্তের গ্রুপ",religion:"ধর্ম",aadhaar:"আধার নম্বর",prevSchool:"আগের স্কুল",prevClass:"আগের ক্লাস",percent:"শেষ পরীক্ষার %",father:"পিতার নাম",mother:"মাতার নাম",occupation:"অভিভাবকের পেশা",mobile:"মোবাইল",mobile2:"বিকল্প মোবাইল",email:"ইমেইল"};
+function fmtDate(d){if(!d)return"";const[y,m,x]=d.split("-");return `${x}/${m}/${y}`}
+function esc(s){return String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function data(){const d=Object.fromEntries(new FormData($("#admForm")).entries());return d}
+function addr(d){return `${d.village}, PO: ${d.po}, PS: ${d.ps}, Dist: ${d.district}${d.pin?" - "+d.pin:""}`}
+function rowsOf(d){return Object.keys(LBL).map(k=>[LBL[k],k==="dob"?fmtDate(d[k]):d[k]]).filter(r=>r[1]).concat([["ঠিকানা",addr(d)]])}
+function buildReview(){const d=data();
+  $("#rv").innerHTML=rowsOf(d).map(r=>`<div><small>${r[0]}</small><b>${esc(r[1])}</b></div>`).join("")+
+   `<div style="grid-column:1/-1"><small>আপলোড করা ডকুমেন্ট</small><b>${DEFS.filter(x=>docs[x.k]).map(x=>"✓ "+x.l).join(" · ")}</b></div>`;}
+
+/* ---- জমা ---- */
+$("#admForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  if(!$("#agree").checked){$("#agErr").textContent="অনুগ্রহ করে ঘোষণায় টিক দিন।";return;}
+  const d=data();d.session=SESSION;
+  d.appNo="MKA-"+SESSION+"-"+Math.floor(10000+Math.random()*90000);
+  d.date=now.toLocaleDateString("en-IN")+" "+now.toLocaleTimeString("en-IN");
+  d.docsList=DEFS.filter(x=>docs[x.k]).map(x=>x.l).join(", ");
+  try{const all=JSON.parse(localStorage.getItem("mka_apps")||"[]");all.push(d);localStorage.setItem("mka_apps",JSON.stringify(all));}catch(_){}
+  if(SCHOOL.SCRIPT_URL){
+    const body=new URLSearchParams(d);
+    body.set("docs",JSON.stringify(DEFS.filter(x=>docs[x.k]).map(x=>({label:x.l,name:docs[x.k].name,type:docs[x.k].type,data:docs[x.k].data}))));
+    fetch(SCHOOL.SCRIPT_URL,{method:"POST",mode:"no-cors",body}).catch(()=>{});
+  }
+  const ph=docs.photo&&docs.photo.type.startsWith("image")?docs.photo.data:"";
+  $("#rbody").innerHTML=`
+   <div class="r-head"><img class="r-logo" src="images/logo.png" alt="logo">
+     <div><h2>${SCHOOL.name}</h2><p style="font-weight:600;color:#0b2a5b">MALANCHA KRISHNANAGAR ACADEMY · ESTD. 2012</p><p>${SCHOOL.address}<br>মোবাইল: ${SCHOOL.phone} / ${SCHOOL.phone2}</p></div></div>
+   <div class="r-title">ADMISSION APPLICATION / ভর্তির আবেদনপত্র — ${SESSION}</div>
+   <div class="r-top"><div><div class="appno">আবেদন নম্বর: ${d.appNo}</div><div style="font-size:.9rem;color:#555">জমার তারিখ: ${d.date}</div></div>
+     <div class="r-photo">${ph?`<img src="${ph}">`:"ছবি"}</div></div>
+   <table class="rt">${rowsOf(d).map(r=>`<tr><th>${r[0]}</th><td>${esc(r[1])}</td></tr>`).join("")}
+     <tr><th>জমা দেওয়া ডকুমেন্ট</th><td>${esc(d.docsList)}</td></tr></table>
+   <div class="r-sign"><div>অভিভাবকের স্বাক্ষর</div><div>অধ্যক্ষ / কর্তৃপক্ষের স্বাক্ষর</div></div>
+   <p class="r-note">* এই আবেদনপত্র প্রিন্ট করে মূল কাগজপত্রসহ স্কুলে জমা দিন। এটি ভর্তির নিশ্চয়তা নয়।</p>`;
+  const imgs=DEFS.filter(x=>docs[x.k]&&x.k!=="photo");
+  $("#rdocs").innerHTML=`<div class="r-head"><img class="r-logo" src="images/logo.png" alt="logo"><div><h2>সংযুক্ত ডকুমেন্ট</h2><p>আবেদন নম্বর: ${d.appNo} · ${esc(d.studentName)}</p></div></div>`+
+    (imgs.length?imgs.map(x=>`<div class="dp"><h3>${x.l}</h3>${docs[x.k].type.startsWith("image")?`<img src="${docs[x.k].data}" alt="${x.l}">`:`<p>PDF ফাইল: ${esc(docs[x.k].name)} (মূল কপি স্কুলে জমা দিন)</p>`}</div>`).join(""):"<p>কোনো অতিরিক্ত ডকুমেন্ট নেই।</p>");
+  $("#formArea").style.display="none";$("#receipt").style.display="block";
+  window.scrollTo({top:0,behavior:"smooth"});
+});
+steps.forEach((st,i)=>{if(i<2){const d=document.createElement("div");d.className="err";d.id="err"+i;st.appendChild(d);}});
+$$(".f input,.f select").forEach(el=>["input","change"].forEach(ev=>el.addEventListener(ev,()=>el.classList.remove("bad"))));
+show(0);
+</script>
+</body>
+</html>
