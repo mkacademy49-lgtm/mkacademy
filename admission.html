@@ -49,6 +49,7 @@
 .dz input{display:none}
 .dz .rm{position:absolute;top:8px;right:8px;width:26px;height:26px;border-radius:50%;border:0;background:#fde4e4;color:#c0392b;font-weight:700;cursor:pointer;display:none}
 .dz.has .rm{display:block}
+.f input.bad,.f select.bad{border-color:#c0392b!important;background:#fff3f2!important;box-shadow:0 0 0 4px rgba(192,57,43,.12)}
 .err{color:#c0392b;font-size:.85rem;margin-top:10px;min-height:1.2em;font-weight:600}
 /* review */
 .rv{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
@@ -242,7 +243,16 @@ function show(n){cur=n;
   if(n===3)buildReview();
   window.scrollTo({top:document.querySelector(".adm-wrap").offsetTop+60,behavior:"smooth"});}
 function validStep(n){
-  if(n<2){for(const el of steps[n].querySelectorAll("input,select")){if(!el.checkValidity()){el.reportValidity();return false;}}return true;}
+  if(n<2){
+    steps[n].querySelectorAll(".bad").forEach(x=>x.classList.remove("bad"));
+    const bad=[...steps[n].querySelectorAll("input,select")].filter(el=>!el.checkValidity());
+    if(bad.length){
+      bad.forEach(el=>el.classList.add("bad"));
+      const names=bad.map(el=>{const l=el.closest(".f")&&el.closest(".f").querySelector("label");return l?l.textContent.replace("*","").trim():el.name});
+      $("#err"+n).textContent="⚠ এই ঘরগুলো পূরণ বা ঠিক করুন (লাল দাগ দেওয়া): "+names.join(", ");
+      bad[0].scrollIntoView({behavior:"smooth",block:"center"});
+      return false;}
+    $("#err"+n).textContent="";return true;}
   if(n===2){const miss=DEFS.filter(d=>d.req&&!docs[d.k]).map(d=>d.l);
     if(miss.length){$("#upErr").textContent="আবশ্যক ডকুমেন্ট বাকি: "+miss.join(", ");return false;}$("#upErr").textContent="";}
   return true;}
@@ -290,6 +300,8 @@ $("#admForm").addEventListener("submit",e=>{
   $("#formArea").style.display="none";$("#receipt").style.display="block";
   window.scrollTo({top:0,behavior:"smooth"});
 });
+steps.forEach((st,i)=>{if(i<2){const d=document.createElement("div");d.className="err";d.id="err"+i;st.appendChild(d);}});
+$$(".f input,.f select").forEach(el=>["input","change"].forEach(ev=>el.addEventListener(ev,()=>el.classList.remove("bad"))));
 show(0);
 </script>
 </body>
