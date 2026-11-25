@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>অ্যাডমিন প্যানেল | M K Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.login-wrap{min-height:70vh;display:grid;place-items:center;padding:50px 0}
+.login-card{background:#fff;border-radius:26px;box-shadow:0 18px 50px rgba(11,42,91,.16);padding:38px 34px;width:min(440px,92vw)}
+.login-card .logo-img{height:70px;margin:0 auto 10px;display:block}
+.login-card h2{text-align:center;color:var(--navy);margin-bottom:4px}
+.login-card .sub{text-align:center;color:var(--muted);font-size:.9rem;margin-bottom:22px}
+.login-card .f{margin-bottom:14px}
+.login-card .btn{width:100%}
+.tabs-s{display:flex;gap:8px;margin:14px 0 4px;background:#eef3fd;border-radius:50px;padding:5px}
+.tabs-s button{flex:1;border:0;background:none;border-radius:50px;padding:9px;font-weight:600;font-family:inherit;color:var(--navy);cursor:pointer}
+.tabs-s button.on{background:#fff;box-shadow:0 3px 10px rgba(11,42,91,.15)}
+.msg{font-size:.88rem;margin-top:12px;min-height:1.2em;font-weight:600;color:#c0392b}
+.msg.ok{color:#1faa59}
+.dash-top{background:linear-gradient(130deg,#06193d,var(--navy) 60%,#1e57b8);color:#fff;padding:26px 0}
+.dash-top .container{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.dash-top h2{font-size:1.4rem}
+.who{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.role-pill{background:var(--gold);color:var(--navy);padding:3px 14px;border-radius:50px;font-weight:700;font-size:.8rem}
+.dtabs{display:flex;gap:8px;flex-wrap:wrap;margin:24px 0}
+.dtabs button{border:2px solid var(--navy);background:#fff;color:var(--navy);padding:9px 20px;border-radius:50px;font-weight:600;cursor:pointer;font-family:inherit}
+.dtabs button.on,.dtabs button:hover{background:var(--navy);color:#fff}
+.panel{display:none;padding-bottom:60px}.panel.on{display:block}
+.box{background:#fff;border-radius:20px;box-shadow:var(--shadow);padding:24px;margin-bottom:22px}
+.box h3{color:var(--navy);margin-bottom:12px;font-size:1.1rem}
+.grid-a{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px}
+.it{background:#f8faff;border:1px solid #e3ebfb;border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.it img{width:100%;aspect-ratio:4/3;object-fit:cover;background:#dde6f7}
+.it .b{padding:10px 12px;font-size:.85rem;flex:1}
+.it .b small{color:var(--muted);display:block}
+.it .act{display:flex;gap:6px;padding:0 10px 10px}
+.sm{border:0;border-radius:10px;padding:7px 12px;font-weight:600;cursor:pointer;font-family:inherit;font-size:.82rem}
+.sm.del{background:#fde4e4;color:#c0392b}.sm.ok{background:#e0f6e9;color:#13824a}.sm.pri{background:var(--navy);color:#fff}.sm.ln{background:#eef3fd;color:var(--navy)}
+.lst{list-style:none}
+.lst li{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:12px 4px;border-bottom:1px solid #eef1f7;flex-wrap:wrap}
+.lst li:last-child{border:0}
+.tbl{width:100%;border-collapse:collapse;font-size:.88rem}
+.tbl th,.tbl td{padding:10px 8px;border-bottom:1px solid #eef1f7;text-align:left;vertical-align:middle}
+.tbl th{color:var(--navy);background:#f3f7ff}
+.scroll-x{overflow-x:auto}
+.badge-s{display:inline-block;border-radius:50px;padding:2px 12px;font-size:.75rem;font-weight:700}
+.badge-s.g{background:#e0f6e9;color:#13824a}.badge-s.r{background:#fde4e4;color:#c0392b}.badge-s.y{background:#fff3cd;color:#8a6d00}
+.empty{color:var(--muted);text-align:center;padding:24px}
+.modal{position:fixed;inset:0;background:rgba(5,15,35,.7);display:none;place-items:center;z-index:300;padding:16px;overflow:auto}
+.modal.open{display:grid}
+.modal .in{background:#fff;border-radius:22px;padding:26px;width:min(720px,100%);max-height:90vh;overflow:auto}
+.setup-note{background:#fff8e1;border:1px solid #ffe29a;border-radius:18px;padding:22px;max-width:640px;margin:40px auto;line-height:1.8}
+.nolink{color:var(--muted);font-size:.85rem}
+</style>
+</head>
+<body>
+
+<div id="v-setup" style="display:none"><div class="container"><div class="setup-note">
+  <h3 style="color:var(--navy)">⚙️ লগইন সিস্টেম এখনও চালু হয়নি</h3>
+  <p>লগইন চালু করতে একবার Supabase (ফ্রি) সেটআপ করতে হবে। <b>LOGIN_SETUP.md</b> ফাইলে ধাপে ধাপে লেখা আছে, তারপর <b>common.js</b>-এর <code>SUPABASE_URL</code> ও <code>SUPABASE_KEY</code> বসালেই এই পেজে লগইন ফর্ম আসবে।</p>
+</div></div></div>
+
+<div id="v-login" style="display:none"><div class="container login-wrap"><div class="login-card">
+  <img class="logo-img" src="images/logo.png" alt="logo">
+  <h2>অ্যাডমিন / শিক্ষক লগইন</h2>
+  <p class="sub">M K Academy ওয়েবসাইট ব্যবস্থাপনা</p>
+  <div class="tabs-s"><button class="on" id="tLogin">লগইন</button><button id="tReg">শিক্ষক নিবন্ধন</button></div>
+  <form id="lf" style="margin-top:18px">
+    <div class="f"><label>ইমেইল</label><input type="email" id="em" required autocomplete="username"></div>
+    <div class="f"><label>পাসওয়ার্ড</label><input type="password" id="pw" required minlength="6" autocomplete="current-password"></div>
+    <div class="f" id="nmRow" style="display:none"><label>আপনার নাম</label><input id="nm"></div>
+    <button class="btn btn-navy" id="lbtn">লগইন করুন</button>
+    <div class="msg" id="lmsg"></div>
+    <p class="nolink" id="regNote" style="display:none">নিবন্ধনের পর অ্যাডমিন আপনার অ্যাকাউন্ট চালু করলে তবেই লগইন করা যাবে।</p>
+  </form>
+</div></div></div>
+
+<div id="v-wait" style="display:none"><div class="container"><div class="setup-note" style="text-align:center">
+  <h3 style="color:var(--navy)">⏳ অ্যাকাউন্ট অনুমোদনের অপেক্ষায়</h3>
+  <p>অ্যাডমিন আপনার অ্যাকাউন্ট চালু করলে আপনি কাজ করতে পারবেন।</p>
+  <button class="btn btn-navy" onclick="logout()">লগআউট</button>
+</div></div></div>
+
+<div id="v-dash" style="display:none">
+  <div class="dash-top"><div class="container">
+    <div><h2>ড্যাশবোর্ড</h2><small style="color:#cbd9f7">ওয়েবসাইটের সব পরিবর্তন এখান থেকে</small></div>
+    <div class="who"><span id="whoName"></span><span class="role-pill" id="whoRole"></span>
+      <a href="index.html" class="btn btn-ghost" style="padding:8px 18px">🌐 সাইট দেখুন</a>
+      <button class="btn btn-gold" style="padding:8px 18px" onclick="logout()">লগআউট</button></div>
+  </div></div>
+  <div class="container">
+    <div class="dtabs" id="dtabs"></div>
+
+    <div class="panel" id="p-gallery">
+      <div class="box"><h3>📷 গ্যালারিতে নতুন ছবি যোগ করুন</h3>
+        <div class="row">
+          <div class="f"><label>ছবি (একসঙ্গে একাধিক বাছতে পারবেন)</label><input type="file" id="gFiles" accept="image/*" multiple></div>
+          <div class="f"><label>ক্যাপশন</label><input id="gCap" placeholder="যেমন: বার্ষিক ক্রীড়া প্রতিযোগিতা"></div>
+          <div class="f"><label>বিভাগ</label><select id="gCat"><option value="event">অনুষ্ঠান</option><option value="students">শিক্ষার্থী</option><option value="compete">প্রতিযোগিতা</option><option value="banner">প্রচার</option></select></div>
+        </div>
+        <button class="btn btn-navy" id="gAdd" style="margin-top:14px">আপলোড করুন</button><div class="msg" id="gMsg"></div>
+      </div>
+      <div class="box"><h3>গ্যালারির ছবিসমূহ</h3><div class="grid-a" id="gList"></div></div>
+    </div>
+
+    <div class="panel" id="p-notices">
+      <div class="box"><h3>📢 নতুন নোটিশ</h3>
+        <div class="row"><div class="f full"><label>নোটিশের লেখা</label><input id="nText" placeholder="যেমন: ২৫ তারিখ স্কুল বন্ধ থাকবে"></div></div>
+        <label style="display:flex;gap:8px;margin:12px 0"><input type="checkbox" id="nNew" checked> "NEW" ট্যাগ দেখান</label>
+        <button class="btn btn-navy" id="nAdd">নোটিশ প্রকাশ করুন</button><div class="msg" id="nMsg"></div>
+      </div>
+      <div class="box"><h3>চালু নোটিশ</h3><ul class="lst" id="nList"></ul></div>
+    </div>
+
+    <div class="panel" id="p-slides">
+      <div class="box"><h3>🖼️ হোম পেজের স্লাইডারে ছবি যোগ করুন</h3>
+        <div class="row"><div class="f"><label>ছবি (চওড়া ব্যানার ভালো)</label><input type="file" id="sFile" accept="image/*"></div>
+        <div class="f"><label>ক্যাপশন</label><input id="sCap"></div></div>
+        <button class="btn btn-navy" id="sAdd" style="margin-top:14px">স্লাইডে যোগ করুন</button><div class="msg" id="sMsg"></div></div>
+      <div class="box"><h3>বর্তমান স্লাইড</h3><div class="grid-a" id="sList"></div></div>
+    </div>
+
+    <div class="panel" id="p-staff">
+      <div class="box"><h3>👨‍🏫 শিক্ষক / পরিচালক যোগ করুন</h3>
+        <div class="row">
+          <div class="f"><label>ধরন</label><select id="tKind"><option value="teacher">শিক্ষক</option><option value="leader">পরিচালক / প্রধান শিক্ষক</option></select></div>
+          <div class="f"><label>নাম</label><input id="tName"></div>
+          <div class="f"><label>পদ</label><input id="tRole" placeholder="Assistant Teacher"></div>
+          <div class="f"><label>যোগ্যতা</label><input id="tQual" placeholder="M.A, B.Ed"></div>
+          <div class="f"><label>ছবি</label><input type="file" id="tFile" accept="image/*"></div>
+        </div>
+        <button class="btn btn-navy" id="tAdd" style="margin-top:14px">যোগ করুন</button><div class="msg" id="tMsg"></div></div>
+      <div class="box"><h3>বর্তমান তালিকা</h3><div class="grid-a" id="tList"></div></div>
+    </div>
+
+    <div class="panel" id="p-settings">
+      <div class="box"><h3>⚙️ স্কুলের তথ্য</h3>
+        <div class="row">
+          <div class="f"><label>মোবাইল ১</label><input id="sPhone"></div>
+          <div class="f"><label>মোবাইল ২</label><input id="sPhone2"></div>
+          <div class="f full"><label>ঠিকানা</label><input id="sAddr"></div>
+          <div class="f"><label>Reg No</label><input id="sReg"></div>
+          <div class="f"><label>UDISE+</label><input id="sUdise"></div>
+        </div>
+        <button class="btn btn-navy" id="setSave" style="margin-top:14px">সংরক্ষণ করুন</button><div class="msg" id="setMsg"></div></div>
+    </div>
+
+    <div class="panel" id="p-adm">
+      <div class="box"><h3>📋 ভর্তির আবেদনসমূহ <button class="sm pri" id="csvBtn" style="margin-left:10px">⬇ Excel (CSV)</button></h3>
+        <div class="scroll-x"><table class="tbl"><thead><tr><th>আবেদন নং</th><th>নাম</th><th>শ্রেণি</th><th>মোবাইল</th><th>তারিখ</th><th></th></tr></thead><tbody id="aList"></tbody></table></div></div>
+    </div>
+
+    <div class="panel" id="p-users">
+      <div class="box"><h3>👥 শিক্ষক অ্যাকাউন্ট</h3>
+        <p class="nolink" style="margin-bottom:10px">নতুন শিক্ষক "শিক্ষক নিবন্ধন" ট্যাব থেকে নিবন্ধন করলে এখানে আসবে। "চালু করুন" চাপলে তবেই কাজ করতে পারবেন।</p>
+        <div class="scroll-x"><table class="tbl"><thead><tr><th>নাম</th><th>ইমেইল</th><th>ভূমিকা</th><th>অবস্থা</th><th></th></tr></thead><tbody id="uList"></tbody></table></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal"><div class="in" id="modalIn"></div></div>
+
+<script src="common.js"></script>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let me=null, prof=null, client=null, regMode=false;
+const show=id=>["setup","login","wait","dash"].forEach(x=>$("#v-"+x).style.display=x===id?"block":"none");
+function say(el,t,ok){el.textContent=t;el.className="msg"+(ok?" ok":"")}
+
+/* ---- ছবি ছোট করে আপলোড ---- */
+function shrink(file,max=1400){return new Promise((res,rej)=>{
+  const r=new FileReader();r.onload=e=>{const im=new Image();im.onload=()=>{
+    const s=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement("canvas");
+    c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+    c.toBlob(b=>b?res(b):rej("ছবি তৈরি হয়নি"),"image/jpeg",.82)};im.onerror=()=>rej("ছবি পড়া যায়নি");im.src=e.target.result};
+  r.onerror=()=>rej("ফাইল পড়া যায়নি");r.readAsDataURL(file)})}
+async function upload(file,folder){
+  const blob=await shrink(file),path=folder+"/"+Date.now()+"-"+Math.random().toString(36).slice(2,8)+".jpg";
+  const u=await client.storage.from("site").upload(path,blob,{contentType:"image/jpeg"});
+  if(u.error)throw u.error.message;
+  return {url:client.storage.from("site").getPublicUrl(path).data.publicUrl,path};}
+async function rmFile(path){if(path)try{await client.storage.from("site").remove([path])}catch(_){}}
+
+/* ---- লগইন ---- */
+$("#tLogin").onclick=()=>setMode(false);$("#tReg").onclick=()=>setMode(true);
+function setMode(r){regMode=r;$("#tLogin").classList.toggle("on",!r);$("#tReg").classList.toggle("on",r);
+  $("#nmRow").style.display=r?"block":"none";$("#regNote").style.display=r?"block":"none";
+  $("#lbtn").textContent=r?"নিবন্ধন করুন":"লগইন করুন";say($("#lmsg"),"");$("#pw").autocomplete=r?"new-password":"current-password"}
+$("#lf").addEventListener("submit",async e=>{e.preventDefault();const m=$("#lmsg");say(m,"অপেক্ষা করুন...",true);
+  const email=$("#em").value.trim(),password=$("#pw").value;
+  if(regMode){
+    const r=await client.auth.signUp({email,password,options:{data:{name:$("#nm").value}}});
+    if(r.error)return say(m,r.error.message);
+    if(r.data.user&&$("#nm").value){/* নাম পরে প্রোফাইলে বসবে */ }
+    say(m,"নিবন্ধন হয়েছে। অ্যাডমিন চালু করলে লগইন করতে পারবেন।",true);
+  }else{
+    const r=await client.auth.signInWithPassword({email,password});
+    if(r.error)return say(m,"ইমেইল বা পাসওয়ার্ড ভুল।");
+    boot();}});
+async function logout(){await client.auth.signOut();location.reload()}
+
+/* ---- ড্যাশবোর্ড ---- */
+async function boot(){
+  const s=await client.auth.getSession();me=s.data.session&&s.data.session.user;
+  if(!me)return show("login");
+  const p=await client.from("profiles").select("*").eq("id",me.id).single();
+  prof=p.data;
+  if(!prof||!prof.active)return show("wait");
+  show("dash");
+  $("#whoName").textContent=prof.name||prof.email;
+  $("#whoRole").textContent=prof.role==="admin"?"অ্যাডমিন":"শিক্ষক";
+  const admin=prof.role==="admin";
+  const tabs=[["gallery","📷 গ্যালারি"],["notices","📢 নোটিশ"]].concat(admin?[["slides","🖼️ স্লাইডার"],["staff","👨‍🏫 শিক্ষকবৃন্দ"],["settings","⚙️ স্কুলের তথ্য"],["adm","📋 ভর্তির আবেদন"],["users","👥 অ্যাকাউন্ট"]]:[]);
+  $("#dtabs").innerHTML=tabs.map((t,i)=>`<button data-t="${t[0]}" class="${i?"":"on"}">${t[1]}</button>`).join("");
+  $$("#dtabs button").forEach(b=>b.onclick=()=>openTab(b.dataset.t));
+  openTab("gallery");}
+const loaders={gallery:loadGallery,notices:loadNotices,slides:loadSlides,staff:loadStaff,settings:loadSettings,adm:loadAdm,users:loadUsers};
+function openTab(t){$$("#dtabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));
+  $$(".panel").forEach(p=>p.classList.toggle("on",p.id==="p-"+t));loaders[t]()}
+const isAdmin=()=>prof&&prof.role==="admin";
+const canDel=row=>isAdmin()||row.created_by===me.id;
+
+/* গ্যালারি */
+async function loadGallery(){
+  const r=await client.from("gallery").select("*").order("created_at",{ascending:false});
+  const L=$("#gList");if(!r.data||!r.data.length){L.innerHTML='<div class="empty">কোনো ছবি নেই</div>';return}
+  L.innerHTML=r.data.map(x=>`<div class="it"><img src="${esc(x.url)}" alt="" loading="lazy"><div class="b"><b>${esc(x.caption||"—")}</b><small>${esc(x.category)}</small></div>
+   <div class="act">${canDel(x)?`<button class="sm del" data-d="${x.id}">মুছুন</button>`:""}</div></div>`).join("");
+  L.querySelectorAll("[data-d]").forEach(b=>b.onclick=async()=>{if(!b.dataset.c){b.dataset.c=1;b.textContent="নিশ্চিত? আবার চাপুন";return}
+    const row=r.data.find(x=>x.id==b.dataset.d);await client.from("gallery").delete().eq("id",row.id);await rmFile(row.path);loadGallery()});}
+$("#gAdd").onclick=async()=>{const m=$("#gMsg"),fs=[...$("#gFiles").files];if(!fs.length)return say(m,"ছবি বাছুন");
+  try{let n=0;for(const f of fs){say(m,`আপলোড হচ্ছে ${++n}/${fs.length}...`,true);const u=await upload(f,"gallery");
+    const r=await client.from("gallery").insert({url:u.url,path:u.path,caption:$("#gCap").value,category:$("#gCat").value});if(r.error)throw r.error.message}
+    say(m,"✓ ছবি যোগ হয়েছে",true);$("#gFiles").value="";$("#gCap").value="";loadGallery()}catch(e){say(m,"ত্রুটি: "+e)}};
+
+/* নোটিশ */
+async function loadNotices(){
+  const r=await client.from("notices").select("*").order("created_at",{ascending:false});
+  const L=$("#nList");if(!r.data||!r.data.length){L.innerHTML='<li class="empty">কোনো নোটিশ নেই</li>';return}
+  L.innerHTML=r.data.map(x=>`<li><span>${x.is_new?'<span class="badge-s r">NEW</span> ':""}${esc(x.text)}</span>${canDel(x)?`<button class="sm del" data-d="${x.id}">মুছুন</button>`:""}</li>`).join("");
+  L.querySelectorAll("[data-d]").forEach(b=>b.onclick=async()=>{if(!b.dataset.c){b.dataset.c=1;b.textContent="নিশ্চিত?";return}await client.from("notices").delete().eq("id",b.dataset.d);loadNotices()});}
+$("#nAdd").onclick=async()=>{const m=$("#nMsg"),t=$("#nText").value.trim();if(!t)return say(m,"নোটিশ লিখুন");
+  const r=await client.from("notices").insert({text:t,is_new:$("#nNew").checked});
+  if(r.error)return say(m,r.error.message);say(m,"✓ প্রকাশ হয়েছে",true);$("#nText").value="";loadNotices()};
+
+/* স্লাইডার */
+async function loadSlides(){
+  const r=await client.from("slides").select("*").order("sort");const L=$("#sList");
+  if(!r.data||!r.data.length){L.innerHTML='<div class="empty">কোনো স্লাইড নেই (সাইটে ডিফল্ট ছবি দেখাবে)</div>';return}
+  L.innerHTML=r.data.map(x=>`<div class="it"><img src="${esc(x.url)}" alt=""><div class="b">${esc(x.caption||"")}</div><div class="act"><button class="sm del" data-d="${x.id}">মুছুন</button></div></div>`).join("");
+  L.querySelectorAll("[data-d]").forEach(b=>b.onclick=async()=>{if(!b.dataset.c){b.dataset.c=1;b.textContent="নিশ্চিত?";return}
+    const row=r.data.find(x=>x.id==b.dataset.d);await client.from("slides").delete().eq("id",row.id);await rmFile(row.path);loadSlides()});}
+$("#sAdd").onclick=async()=>{const m=$("#sMsg"),f=$("#sFile").files[0];if(!f)return say(m,"ছবি বাছুন");
+  try{say(m,"আপলোড হচ্ছে...",true);const u=await upload(f,"slides");
+    const r=await client.from("slides").insert({url:u.url,path:u.path,caption:$("#sCap").value,sort:Date.now()});if(r.error)throw r.error.message;
+    say(m,"✓ যোগ হয়েছে",true);$("#sFile").value="";$("#sCap").value="";loadSlides()}catch(e){say(m,"ত্রুটি: "+e)}};
+
+/* শিক্ষকবৃন্দ */
+async function loadStaff(){
+  const r=await client.from("staff").select("*").order("sort");const L=$("#tList");
+  if(!r.data||!r.data.length){L.innerHTML='<div class="empty">তালিকা খালি</div>';return}
+  L.innerHTML=r.data.map(x=>`<div class="it"><img src="${esc(x.photo_url||"")}" alt=""><div class="b"><b>${esc(x.name||"—")}</b><small>${esc(x.role_title)} ${esc(x.qualification)}</small><small>${x.kind==="leader"?"পরিচালক/প্রধান":"শিক্ষক"}</small></div>
+   <div class="act"><button class="sm ln" data-e="${x.id}">সম্পাদনা</button><button class="sm del" data-d="${x.id}">মুছুন</button></div></div>`).join("");
+  L.querySelectorAll("[data-d]").forEach(b=>b.onclick=async()=>{if(!b.dataset.c){b.dataset.c=1;b.textContent="নিশ্চিত?";return}
+    const row=r.data.find(x=>x.id==b.dataset.d);await client.from("staff").delete().eq("id",row.id);await rmFile(row.photo_path);loadStaff()});
+  L.querySelectorAll("[data-e]").forEach(b=>b.onclick=()=>editStaff(r.data.find(x=>x.id==b.dataset.e)));}
+function editStaff(x){
+  $("#modalIn").innerHTML=`<h3 style="color:var(--navy);margin-bottom:14px">সম্পাদনা</h3><div class="row">
+   <div class="f"><label>নাম</label><input id="eN" value="${esc(x.name)}"></div><div class="f"><label>পদ</label><input id="eR" value="${esc(x.role_title)}"></div>
+   <div class="f"><label>যোগ্যতা</label><input id="eQ" value="${esc(x.qualification)}"></div><div class="f"><label>নতুন ছবি (ঐচ্ছিক)</label><input type="file" id="eF" accept="image/*"></div></div>
+   <div style="display:flex;gap:10px;margin-top:16px"><button class="btn btn-navy" id="eS">সংরক্ষণ</button><button class="btn btn-line" id="eC">বাতিল</button></div><div class="msg" id="eM"></div>`;
+  $("#modal").classList.add("open");$("#eC").onclick=()=>$("#modal").classList.remove("open");
+  $("#eS").onclick=async()=>{try{const up={name:$("#eN").value,role_title:$("#eR").value,qualification:$("#eQ").value};const f=$("#eF").files[0];
+    if(f){const u=await upload(f,"staff");up.photo_url=u.url;up.photo_path=u.path;await rmFile(x.photo_path)}
+    const r=await client.from("staff").update(up).eq("id",x.id);if(r.error)throw r.error.message;$("#modal").classList.remove("open");loadStaff()}catch(e){say($("#eM"),"ত্রুটি: "+e)}}}
+$("#tAdd").onclick=async()=>{const m=$("#tMsg");
+  try{say(m,"সংরক্ষণ হচ্ছে...",true);const row={kind:$("#tKind").value,name:$("#tName").value,role_title:$("#tRole").value,qualification:$("#tQual").value,sort:Date.now()};
+    const f=$("#tFile").files[0];if(f){const u=await upload(f,"staff");row.photo_url=u.url;row.photo_path=u.path}
+    const r=await client.from("staff").insert(row);if(r.error)throw r.error.message;
+    say(m,"✓ যোগ হয়েছে",true);["tName","tRole","tQual","tFile"].forEach(i=>$("#"+i).value="");loadStaff()}catch(e){say(m,"ত্রুটি: "+e)}};
+
+/* স্কুলের তথ্য */
+const SKEYS={sPhone:"phone",sPhone2:"phone2",sAddr:"address",sReg:"reg",sUdise:"udise"};
+async function loadSettings(){await settingsReady;Object.keys(SKEYS).forEach(id=>$("#"+id).value=SETTINGS[SKEYS[id]]||SCHOOL[SKEYS[id]]||"")}
+$("#setSave").onclick=async()=>{const rows=Object.keys(SKEYS).map(id=>({key:SKEYS[id],value:$("#"+id).value}));
+  const r=await client.from("settings").upsert(rows);say($("#setMsg"),r.error?r.error.message:"✓ সংরক্ষিত হয়েছে। সাইটে নতুন তথ্য দেখাবে।",!r.error)};
+
+/* ভর্তির আবেদন */
+let ADM=[];
+async function loadAdm(){
+  const r=await client.from("admissions").select("*").order("created_at",{ascending:false});ADM=r.data||[];
+  $("#aList").innerHTML=ADM.length?ADM.map((x,i)=>`<tr><td>${esc(x.app_no)}</td><td>${esc(x.student_name)}</td><td>${esc(x.class_applied)}</td><td>${esc(x.mobile)}</td><td>${new Date(x.created_at).toLocaleDateString("en-IN")}</td>
+   <td><button class="sm pri" data-v="${i}">দেখুন</button> <button class="sm del" data-d="${x.id}">মুছুন</button></td></tr>`).join(""):'<tr><td colspan="6" class="empty">এখনও কোনো আবেদন আসেনি</td></tr>';
+  $$("#aList [data-v]").forEach(b=>b.onclick=()=>viewAdm(ADM[b.dataset.v]));
+  $$("#aList [data-d]").forEach(b=>b.onclick=async()=>{if(!b.dataset.c){b.dataset.c=1;b.textContent="নিশ্চিত?";return}
+    const row=ADM.find(x=>x.id==b.dataset.d);const paths=(row.docs||[]).map(d=>d.path).filter(Boolean);
+    if(paths.length)await client.storage.from("docs").remove(paths);await client.from("admissions").delete().eq("id",row.id);loadAdm()});}
+const ALBL={studentName:"শিক্ষার্থীর নাম",dob:"জন্ম তারিখ",gender:"লিঙ্গ",classApplied:"ভর্তির শ্রেণি",blood:"রক্তের গ্রুপ",religion:"ধর্ম",aadhaar:"আধার",prevSchool:"আগের স্কুল",prevClass:"আগের ক্লাস",percent:"শেষ পরীক্ষার %",father:"পিতা",mother:"মাতা",occupation:"পেশা",mobile:"মোবাইল",mobile2:"বিকল্প মোবাইল",email:"ইমেইল",village:"গ্রাম",po:"পোস্ট অফিস",ps:"থানা",district:"জেলা",pin:"পিন"};
+async function viewAdm(x){
+  const d=x.data||{};let docs="";
+  for(const f of (x.docs||[])){const s=await client.storage.from("docs").createSignedUrl(f.path,3600);
+    docs+=`<li><span>${esc(f.label)}</span><a class="sm pri" target="_blank" href="${esc(s.data?s.data.signedUrl:"#")}">খুলুন</a></li>`}
+  $("#modalIn").innerHTML=`<h3 style="color:var(--navy)">${esc(x.app_no)} · ${esc(x.student_name)}</h3>
+   <table class="tbl" style="margin:12px 0">${Object.keys(ALBL).filter(k=>d[k]).map(k=>`<tr><th style="width:36%">${ALBL[k]}</th><td>${esc(d[k])}</td></tr>`).join("")}</table>
+   <h4 style="color:var(--navy)">ডকুমেন্ট</h4><ul class="lst">${docs||'<li class="empty">কোনো ডকুমেন্ট নেই</li>'}</ul>
+   <button class="btn btn-navy" id="mc" style="margin-top:14px">বন্ধ করুন</button>`;
+  $("#modal").classList.add("open");$("#mc").onclick=()=>$("#modal").classList.remove("open")}
+$("#csvBtn").onclick=()=>{if(!ADM.length)return;const keys=Object.keys(ALBL);
+  const q=v=>'"'+String(v==null?"":v).replace(/"/g,'""')+'"';
+  const csv="﻿"+[["আবেদন নং","তারিখ"].concat(keys.map(k=>ALBL[k])).map(q).join(",")].concat(ADM.map(x=>[x.app_no,new Date(x.created_at).toLocaleString("en-IN")].concat(keys.map(k=>(x.data||{})[k])).map(q).join(","))).join("\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download="admissions.csv";a.click()};
+
+/* অ্যাকাউন্ট */
+async function loadUsers(){
+  const r=await client.from("profiles").select("*").order("email");
+  $("#uList").innerHTML=(r.data||[]).map(u=>{const self=u.id===me.id;return `<tr><td>${esc(u.name)}</td><td>${esc(u.email)}</td>
+   <td><select data-r="${u.id}" ${self?"disabled":""}><option value="teacher" ${u.role==="teacher"?"selected":""}>শিক্ষক</option><option value="admin" ${u.role==="admin"?"selected":""}>অ্যাডমিন</option></select></td>
+   <td><span class="badge-s ${u.active?"g":"y"}">${u.active?"চালু":"অপেক্ষায়"}</span></td>
+   <td>${self?"(আপনি)":`<button class="sm ${u.active?"del":"ok"}" data-a="${u.id}" data-v="${u.active?0:1}">${u.active?"বন্ধ করুন":"চালু করুন"}</button>`}</td></tr>`}).join("");
+  $$("#uList [data-a]").forEach(b=>b.onclick=async()=>{await client.from("profiles").update({active:b.dataset.v==="1"}).eq("id",b.dataset.a);loadUsers()});
+  $$("#uList [data-r]").forEach(s=>s.onchange=async()=>{await client.from("profiles").update({role:s.value}).eq("id",s.dataset.r);loadUsers()});}
+
+(async()=>{client=await dbReady;if(!client)return show("setup");
+  client.auth.onAuthStateChange(()=>{});boot()})();
+</script>
+</body>
+</html>

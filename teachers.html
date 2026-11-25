@@ -14,7 +14,7 @@
 <section>
   <div class="container">
     <div class="sec-head reveal"><span class="tag">নেতৃত্ব</span><h2>পরিচালনা ও প্রধান শিক্ষক</h2><div class="bar"></div></div>
-    <div class="leaders">
+    <div class="leaders" id="leaders">
       <div class="leader reveal">
         <div class="ph"><img src="images/lead1.jpg" alt="মোঃ খাবিরুদ্দিন সেখ"></div>
         <h3>মোঃ খাবিরুদ্দিন সেখ</h3>
@@ -47,6 +47,17 @@
 const g=document.getElementById("tg");
 for(let i=1;i<=14;i++){g.insertAdjacentHTML("beforeend",`<div class="t-card reveal"><img src="images/t${i}.jpg" alt="শিক্ষক ${i}" loading="lazy"></div>`);}
 document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+const E=v=>String(v||"").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+dbReady.then(async c=>{
+  if(!c)return;
+  try{
+    const r=await c.from("staff").select("*").order("sort");
+    if(!r.data||!r.data.length)return;
+    const L=r.data.filter(s=>s.kind==="leader"),T=r.data.filter(s=>s.kind!=="leader");
+    document.getElementById("leaders").innerHTML=L.map(s=>`<div class="leader reveal in"><div class="ph">${s.photo_url?`<img src="${E(s.photo_url)}" alt="${E(s.name)}">`:""}</div><h3>${E(s.name)}</h3><span class="role">${E(s.role_title)}${s.qualification?" · "+E(s.qualification):""}</span></div>`).join("");
+    g.innerHTML=T.map(s=>`<div class="t-card reveal in">${s.photo_url?`<img src="${E(s.photo_url)}" alt="${E(s.name)}" loading="lazy">`:""}${s.name?`<div class="t-info"><b>${E(s.name)}</b><small>${E(s.role_title)}</small><small>${E(s.qualification)}</small></div>`:""}</div>`).join("");
+  }catch(e){}
+});
 </script>
 </body>
 </html>

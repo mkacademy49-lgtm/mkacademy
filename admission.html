@@ -172,7 +172,7 @@
 
 <!-- ======= প্রিন্টযোগ্য রসিদ ======= -->
 <div id="receipt"><div class="container" style="padding:40px 0">
-  <div class="success no-print"><div class="tick">✓</div><h2 style="color:var(--navy)">আবেদন সফলভাবে জমা হয়েছে!</h2><p>নিচের কপিটি প্রিন্ট করে ডকুমেন্টসহ স্কুলে জমা দিন।</p></div>
+  <div class="success no-print"><div class="tick">✓</div><h2 style="color:var(--navy)">আবেদন সফলভাবে জমা হয়েছে!</h2><p>নিচের কপিটি প্রিন্ট করে ডকুমেন্টসহ স্কুলে জমা দিন।</p><p id="saveStat" style="font-weight:600;margin-top:8px"></p></div>
   <div class="r-actions"><button class="btn btn-navy" onclick="window.print()">🖨️ প্রিন্ট করুন / PDF সেভ করুন</button><a class="btn btn-gold" href="admission.html">নতুন আবেদন</a></div>
   <div class="receipt" id="rbody"></div>
   <div class="receipt doc-page" id="rdocs" style="margin-top:24px"></div>
@@ -232,8 +232,8 @@ DEFS.forEach(d=>{
 });
 
 /* ---- ধাপ ---- */
-let cur=0;const steps=$$(".step"),sts=$$(".st");
-function show(n){cur=n;
+let stepNo=0;const steps=$$(".step"),sts=$$(".st");
+function show(n){stepNo=n;
   steps.forEach((s,i)=>s.classList.toggle("active",i===n));
   sts.forEach((s,i)=>{s.classList.toggle("on",i===n);s.classList.toggle("done",i<n);s.querySelector("i").textContent=i<n?"✓":["১","২","৩","৪"][i];});
   $("#sbar").style.width=`calc((100% - 136px) * ${n/3})`;
@@ -256,8 +256,8 @@ function validStep(n){
   if(n===2){const miss=DEFS.filter(d=>d.req&&!docs[d.k]).map(d=>d.l);
     if(miss.length){$("#upErr").textContent="আবশ্যক ডকুমেন্ট বাকি: "+miss.join(", ");return false;}$("#upErr").textContent="";}
   return true;}
-$("#bNext").addEventListener("click",()=>{if(validStep(cur))show(cur+1)});
-$("#bPrev").addEventListener("click",()=>show(cur-1));
+$("#bNext").addEventListener("click",()=>{if(validStep(stepNo))show(stepNo+1)});
+$("#bPrev").addEventListener("click",()=>show(stepNo-1));
 
 const LBL={studentName:"শিক্ষার্থীর নাম",dob:"জন্ম তারিখ",gender:"লিঙ্গ",classApplied:"ভর্তির শ্রেণি",blood:"রক্তের গ্রুপ",religion:"ধর্ম",aadhaar:"আধার নম্বর",prevSchool:"আগের স্কুল",prevClass:"আগের ক্লাস",percent:"শেষ পরীক্ষার %",father:"পিতার নাম",mother:"মাতার নাম",occupation:"অভিভাবকের পেশা",mobile:"মোবাইল",mobile2:"বিকল্প মোবাইল",email:"ইমেইল"};
 function fmtDate(d){if(!d)return"";const[y,m,x]=d.split("-");return `${x}/${m}/${y}`}
@@ -268,6 +268,20 @@ function rowsOf(d){return Object.keys(LBL).map(k=>[LBL[k],k==="dob"?fmtDate(d[k]
 function buildReview(){const d=data();
   $("#rv").innerHTML=rowsOf(d).map(r=>`<div><small>${r[0]}</small><b>${esc(r[1])}</b></div>`).join("")+
    `<div style="grid-column:1/-1"><small>আপলোড করা ডকুমেন্ট</small><b>${DEFS.filter(x=>docs[x.k]).map(x=>"✓ "+x.l).join(" · ")}</b></div>`;}
+
+/* ---- ডাটাবেসে সেভ (Supabase চালু থাকলে) ---- */
+async function saveToDb(d){
+  const c=await dbReady;if(!c)return "off";
+  const up=[];
+  for(const x of DEFS){const f=docs[x.k];if(!f)continue;
+    const blob=await (await fetch(f.data)).blob();
+    const path=d.appNo+"/"+x.k+"."+(f.type==="application/pdf"?"pdf":"jpg");
+    const u=await c.storage.from("docs").upload(path,blob,{contentType:f.type});
+    if(u.error)throw u.error;
+    up.push({label:x.l,key:x.k,path,type:f.type});}
+  const r=await c.from("admissions").insert({app_no:d.appNo,student_name:d.studentName,class_applied:d.classApplied,mobile:d.mobile,data:d,docs:up});
+  if(r.error)throw r.error;
+  return "ok";}
 
 /* ---- জমা ---- */
 $("#admForm").addEventListener("submit",e=>{
@@ -299,6 +313,9 @@ $("#admForm").addEventListener("submit",e=>{
     (imgs.length?imgs.map(x=>`<div class="dp"><h3>${x.l}</h3>${docs[x.k].type.startsWith("image")?`<img src="${docs[x.k].data}" alt="${x.l}">`:`<p>PDF ফাইল: ${esc(docs[x.k].name)} (মূল কপি স্কুলে জমা দিন)</p>`}</div>`).join(""):"<p>কোনো অতিরিক্ত ডকুমেন্ট নেই।</p>");
   $("#formArea").style.display="none";$("#receipt").style.display="block";
   window.scrollTo({top:0,behavior:"smooth"});
+  const st=$("#saveStat");
+  saveToDb(d).then(r=>{if(r==="ok"){st.style.color="#1faa59";st.textContent="✓ আবেদন ও ডকুমেন্ট স্কুলের সিস্টেমে সেভ হয়েছে।";}})
+    .catch(()=>{st.style.color="#c0392b";st.textContent="⚠ অনলাইনে সেভ করা যায়নি (ইন্টারনেট সমস্যা হতে পারে)। প্রিন্ট কপিটি অবশ্যই স্কুলে জমা দিন।";});
 });
 steps.forEach((st,i)=>{if(i<2){const d=document.createElement("div");d.className="err";d.id="err"+i;st.appendChild(d);}});
 $$(".f input,.f select").forEach(el=>["input","change"].forEach(ev=>el.addEventListener(ev,()=>el.classList.remove("bad"))));

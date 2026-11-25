@@ -21,7 +21,7 @@
       <button data-f="banner">প্রচার</button>
     </div>
     <div class="gallery" id="gallery"></div>
-    <p style="text-align:center;color:var(--muted);margin-top:26px;font-size:.9rem">আরও ছবি যোগ করতে images ফোল্ডারে ছবি রেখে gallery.html-এর items তালিকায় একটি লাইন যোগ করুন।</p>
+    
   </div>
 </section>
 
@@ -44,7 +44,17 @@ const items=[
  {c:"compete",t:"ম্যাথ কম্পিটিশনের উপহার",s:"images/g9.jpg"}
 ];
 const g=document.getElementById("gallery"),lb=document.getElementById("lb"),lbc=document.getElementById("lbc");
-g.innerHTML=items.map((x,n)=>`<div class="g-item reveal" data-c="${x.c}"><img src="${x.s}" alt="${x.t}" loading="lazy"><div class="cap">${x.t}</div></div>`).join("");
+function draw(list){
+  g.innerHTML=list.map(x=>`<div class="g-item reveal" data-c="${x.c}"><img src="${x.s}" alt="${(x.t||"").replace(/"/g,"&quot;")}" loading="lazy"><div class="cap">${x.t||""}</div></div>`).join("");
+  document.querySelectorAll("#filters button").forEach(b=>b.classList.toggle("on",b.dataset.f==="all"));
+  g.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+}
+draw(items);
+dbReady.then(async c=>{
+  if(!c)return;
+  try{const r=await c.from("gallery").select("*").order("created_at",{ascending:false});
+    if(r.data&&r.data.length)draw(r.data.map(x=>({c:x.category,t:x.caption,s:x.url})));}catch(e){}
+});
 g.addEventListener("click",e=>{const it=e.target.closest(".g-item");if(!it)return;const im=it.querySelector("img");
   lbc.innerHTML=`<img src="${im.src}" alt="">`;lb.classList.add("open")});
 lb.addEventListener("click",e=>{if(e.target===lb)lb.classList.remove("open")});

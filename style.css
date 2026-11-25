@@ -236,3 +236,11 @@ header.site{border-bottom:4px solid transparent;border-image:linear-gradient(90d
 .t-card img{width:100%;display:block}
 .s-btn:focus-visible,.btn:focus-visible,.menu a:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 @media print{.doc-page{break-before:page;page-break-before:always}}
+
+.adm-link{display:inline-block;margin-top:8px;color:#8fa6d1;font-size:.8rem;opacity:.7}
+.adm-link:hover{opacity:1;color:var(--gold)}
+.t-info{padding:8px 10px 12px;text-align:center}
+.t-info b{display:block;color:var(--navy);font-size:.88rem;line-height:1.3}
+.t-info small{display:block;color:var(--muted);font-size:.75rem}
+.btn-line{background:#fff;border:2px solid #cdd8ee;color:var(--navy)}
+.btn-line:hover{border-color:var(--navy)}

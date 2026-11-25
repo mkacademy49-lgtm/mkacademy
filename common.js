@@ -8,9 +8,23 @@ const SCHOOL = {
   phone2: "9475769100",
   reg: "IV-120100204/2026",
   udise: "19072200805",
-  // Google Sheet-এ আবেদন সেভ করতে README.md দেখে Apps Script URL এখানে বসান
+  // (পুরোনো পদ্ধতি) Google Sheet-এর Apps Script URL। Supabase চালু থাকলে এটা লাগবে না।
   SCRIPT_URL: ""
 };
+
+/* ===== লগইন ও ডাটাবেস (Supabase) — LOGIN_SETUP.md দেখে এই দুটি বসান ===== */
+const SUPABASE_URL = "";   // যেমন: https://abcdxyz.supabase.co
+const SUPABASE_KEY = "";   // anon public key
+
+let sb = null;
+const dbReady = new Promise(res => {
+  if (!SUPABASE_URL || !SUPABASE_KEY) { res(null); return; }
+  const s = document.createElement("script");
+  s.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js";
+  s.onload = () => { try { sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY); res(sb); } catch (e) { res(null); } };
+  s.onerror = () => res(null);
+  document.head.appendChild(s);
+});
 
 const pages = [
   ["index.html", "হোম"],
@@ -20,9 +34,11 @@ const pages = [
   ["contact.html", "Contact Us"],
   ["admission.html", "অনলাইন ভর্তি", "cta"]
 ];
-const cur = location.pathname.split("/").pop() || "index.html";
+const curPage = location.pathname.split("/").pop() || "index.html";
 
-document.body.insertAdjacentHTML("afterbegin", `
+function buildChrome() {
+  document.querySelectorAll(".topbar,header.site,footer.site,.wa").forEach(e => e.remove());
+  document.body.insertAdjacentHTML("afterbegin", `
 <div class="topbar"><div class="container">
   <span>📍 ${SCHOOL.address}</span>
   <span>📞 <b>${SCHOOL.phone}</b> / <b>${SCHOOL.phone2}</b></span>
@@ -34,11 +50,11 @@ document.body.insertAdjacentHTML("afterbegin", `
   </a>
   <button class="burger" aria-label="menu" onclick="document.getElementById('menu').classList.toggle('open')">☰</button>
   <ul class="menu" id="menu">
-    ${pages.map(p => `<li><a href="${p[0]}" class="${p[2] || ""} ${cur === p[0] ? "active" : ""}">${p[1]}</a></li>`).join("")}
+    ${pages.map(p => `<li><a href="${p[0]}" class="${p[2] || ""} ${curPage === p[0] ? "active" : ""}">${p[1]}</a></li>`).join("")}
   </ul>
 </div></header>`);
 
-document.body.insertAdjacentHTML("beforeend", `
+  document.body.insertAdjacentHTML("beforeend", `
 <footer class="site"><div class="container">
   <div class="f-grid">
     <div>
@@ -57,10 +73,27 @@ document.body.insertAdjacentHTML("beforeend", `
       <li>🏷️ UDISE+: ${SCHOOL.udise}</li>
     </ul></div>
   </div>
-  <div class="copy">© ${new Date().getFullYear()} ${SCHOOL.name}. সর্বস্বত্ব সংরক্ষিত।<br><span class="credit">Design By - <b>Md Badiujjaman</b></span></div>
+  <div class="copy">© ${new Date().getFullYear()} ${SCHOOL.name}. সর্বস্বত্ব সংরক্ষিত।<br><span class="credit">Design By - <b>Md Badiujjaman</b></span><br><a class="adm-link" href="admin.html">🔒 অ্যাডমিন / শিক্ষক লগইন</a></div>
 </div></footer>
 <a class="wa" href="https://wa.me/91${SCHOOL.phone}" target="_blank" aria-label="WhatsApp">💬</a>`);
+}
+buildChrome();
 
 // scroll reveal
 const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add("in"); }), { threshold: .12 });
 document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+
+// অ্যাডমিন প্যানেল থেকে বদলানো সেটিংস (ফোন, ঠিকানা, পরিসংখ্যান ইত্যাদি)
+let SETTINGS = {};
+const settingsReady = dbReady.then(async c => {
+  if (!c) return SETTINGS;
+  try {
+    const r = await c.from("settings").select("*");
+    if (r.data && r.data.length) {
+      r.data.forEach(x => { SETTINGS[x.key] = x.value; });
+      ["phone", "phone2", "address", "reg", "udise"].forEach(k => { if (SETTINGS[k]) SCHOOL[k] = SETTINGS[k]; });
+      buildChrome();
+    }
+  } catch (e) { /* ডিফল্ট তথ্য থাকবে */ }
+  return SETTINGS;
+});

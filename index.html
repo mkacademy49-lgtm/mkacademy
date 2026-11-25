@@ -127,7 +127,7 @@
 <section>
   <div class="container">
     <div class="sec-head reveal"><span class="tag">নোটিশ বোর্ড</span><h2>সাম্প্রতিক ঘোষণা</h2><div class="bar"></div></div>
-    <ul class="notice reveal">
+    <ul class="notice reveal" id="noticeList">
       <li><span class="new">NEW</span> নতুন শিক্ষাবর্ষের অনলাইন ভর্তি শুরু হয়েছে।</li>
       <li>📌 ভর্তির জন্য শিক্ষার্থীর জন্মসনদ ও অভিভাবকের মোবাইল নম্বর প্রস্তুত রাখুন।</li>
       <li>📌 আবেদন জমা দেওয়ার পর প্রিন্ট কপি স্কুলে জমা দিতে হবে।</li>
@@ -148,18 +148,33 @@
 <script src="common.js"></script>
 <script>
 (function(){
-  const sl=document.getElementById("slides"),n=sl.children.length,dots=document.getElementById("dots");
-  let i=0,t;
-  for(let k=0;k<n;k++){const b=document.createElement("button");b.setAttribute("aria-label","ছবি "+(k+1));b.onclick=()=>go(k);dots.appendChild(b);}
+  const sl=document.getElementById("slides"),dots=document.getElementById("dots"),box=document.getElementById("slider");
+  let i=0,n=0,t;
   function go(k){i=(k+n)%n;sl.style.transform="translateX(-"+i*100+"%)";[...dots.children].forEach((d,j)=>d.classList.toggle("on",j===i));restart();}
-  function restart(){clearInterval(t);t=setInterval(()=>go(i+1),4500);}
+  function restart(){clearInterval(t);if(n>1)t=setInterval(()=>go(i+1),4500);}
+  function build(){n=sl.children.length;dots.innerHTML="";
+    for(let k=0;k<n;k++){const b=document.createElement("button");b.setAttribute("aria-label","ছবি "+(k+1));b.onclick=()=>go(k);dots.appendChild(b);}
+    if(n)go(0);}
   document.getElementById("sPrev").onclick=()=>go(i-1);
   document.getElementById("sNext").onclick=()=>go(i+1);
-  const box=document.getElementById("slider");let x0=null;
+  let x0=null;
   box.addEventListener("touchstart",e=>{x0=e.touches[0].clientX},{passive:true});
   box.addEventListener("touchend",e=>{if(x0===null)return;const d=e.changedTouches[0].clientX-x0;if(Math.abs(d)>40)go(d<0?i+1:i-1);x0=null});
   box.addEventListener("mouseenter",()=>clearInterval(t));box.addEventListener("mouseleave",restart);
-  go(0);
+  build();
+  dbReady.then(async c=>{
+    if(!c)return;
+    try{
+      const r=await c.from("slides").select("*").order("sort");
+      if(r.data&&r.data.length){
+        sl.innerHTML=r.data.map(s=>`<div class="slide"><div class="bg" style="background-image:url('${s.url}')"></div><img src="${s.url}" alt=""></div>`).join("");
+        i=0;build();}
+      const q=await c.from("notices").select("*").order("created_at",{ascending:false}).limit(8);
+      if(q.data&&q.data.length){
+        const e=v=>String(v||"").replace(/[&<>]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[m]));
+        document.getElementById("noticeList").innerHTML=q.data.map(n=>`<li>${n.is_new?'<span class="new">NEW</span>':"📌"} ${e(n.text)}</li>`).join("");}
+    }catch(e){}
+  });
 })();
 </script>
 </body>
