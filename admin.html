@@ -58,8 +58,18 @@
 <body>
 
 <div id="v-setup" style="display:none"><div class="container"><div class="setup-note">
-  <h3 style="color:var(--navy)">⚙️ লগইন সিস্টেম এখনও চালু হয়নি</h3>
-  <p>লগইন চালু করতে একবার Supabase (ফ্রি) সেটআপ করতে হবে। <b>LOGIN_SETUP.md</b> ফাইলে ধাপে ধাপে লেখা আছে, তারপর <b>common.js</b>-এর <code>SUPABASE_URL</code> ও <code>SUPABASE_KEY</code> বসালেই এই পেজে লগইন ফর্ম আসবে।</p>
+  <h3 style="color:var(--navy)">⚙️ প্রথমে একবার সংযোগ সেটআপ করতে হবে</h3>
+  <p>Supabase-এ প্রজেক্ট খুলে <b>supabase_setup.sql</b> চালানোর পর (LOGIN_SETUP.md-এর ধাপ ১–৩), নিচের দুটি ঘরে সেখান থেকে কপি করা <b>Project URL</b> ও <b>anon key</b> বসিয়ে পরীক্ষা করুন।</p>
+  <div class="f" style="margin-top:12px"><label>Project URL</label><input id="cfgUrl" placeholder="https://xxxxxxxx.supabase.co"></div>
+  <div class="f" style="margin-top:10px"><label>anon public key</label><input id="cfgKey" placeholder="eyJhbGciOi..."></div>
+  <button class="btn btn-navy" id="cfgTest" style="margin-top:14px">🔌 সংযোগ পরীক্ষা করুন</button>
+  <div class="msg" id="cfgMsg"></div>
+  <div id="cfgOut" style="display:none;margin-top:14px">
+    <p><b>সংযোগ ঠিক আছে!</b> এখন GitHub-এ <code>config.js</code> ফাইলটি খুলে (পেন্সিল ✏️ আইকন) এর পুরো লেখা মুছে নিচেরটা বসান, তারপর <b>Commit changes</b>:</p>
+    <pre id="cfgTxt" style="background:#0b2a5b;color:#fff;padding:14px;border-radius:12px;overflow:auto;font-size:.8rem;white-space:pre-wrap;word-break:break-all"></pre>
+    <button class="btn btn-gold" id="cfgCopy" style="margin-top:8px;padding:10px 22px">📋 কপি করুন</button>
+    <p style="margin-top:10px">১–২ মিনিট পর এই পেজ রিফ্রেশ (Ctrl+F5) করলে লগইন ফর্ম দেখাবে।</p>
+  </div>
 </div></div></div>
 
 <div id="v-login" style="display:none"><div class="container login-wrap"><div class="login-card">
@@ -77,10 +87,15 @@
   </form>
 </div></div></div>
 
-<div id="v-wait" style="display:none"><div class="container"><div class="setup-note" style="text-align:center">
-  <h3 style="color:var(--navy)">⏳ অ্যাকাউন্ট অনুমোদনের অপেক্ষায়</h3>
-  <p>অ্যাডমিন আপনার অ্যাকাউন্ট চালু করলে আপনি কাজ করতে পারবেন।</p>
-  <button class="btn btn-navy" onclick="logout()">লগআউট</button>
+<div id="v-wait" style="display:none"><div class="container"><div class="setup-note">
+  <h3 style="color:var(--navy)" id="waitTitle">⏳ অ্যাকাউন্ট অনুমোদনের অপেক্ষায়</h3>
+  <p id="waitMsg">অ্যাডমিন আপনার অ্যাকাউন্ট চালু করলে আপনি কাজ করতে পারবেন।</p>
+  <div id="waitSql" style="display:none;margin-top:12px">
+    <p><b>আপনিই স্কুলের মালিক/অ্যাডমিন হলে</b> Supabase → <b>SQL Editor</b>-এ এই লাইনটি চালান, তারপর পেজ রিফ্রেশ করুন:</p>
+    <pre id="sqlTxt" style="background:#0b2a5b;color:#fff;padding:14px;border-radius:12px;overflow:auto;font-size:.8rem;white-space:pre-wrap;word-break:break-all"></pre>
+    <button class="btn btn-gold" id="sqlCopy" style="margin:8px 0;padding:10px 22px">📋 কপি করুন</button>
+  </div>
+  <div style="margin-top:14px"><button class="btn btn-navy" onclick="logout()">লগআউট</button></div>
 </div></div></div>
 
 <div id="v-dash" style="display:none">
@@ -153,8 +168,17 @@
     </div>
 
     <div class="panel" id="p-users">
-      <div class="box"><h3>👥 শিক্ষক অ্যাকাউন্ট</h3>
-        <p class="nolink" style="margin-bottom:10px">নতুন শিক্ষক "শিক্ষক নিবন্ধন" ট্যাব থেকে নিবন্ধন করলে এখানে আসবে। "চালু করুন" চাপলে তবেই কাজ করতে পারবেন।</p>
+      <div class="box"><h3>➕ নতুন শিক্ষকের লগইন তৈরি করুন</h3>
+        <p class="nolink" style="margin-bottom:10px">নাম, ইমেইল ও একটি পাসওয়ার্ড দিন। অ্যাকাউন্ট সঙ্গে সঙ্গে চালু হবে। এরপর শিক্ষককে ইমেইল ও পাসওয়ার্ডটি জানিয়ে দিন।</p>
+        <div class="row">
+          <div class="f"><label>শিক্ষকের নাম</label><input id="uN"></div>
+          <div class="f"><label>ইমেইল</label><input type="email" id="uE" autocomplete="off"></div>
+          <div class="f"><label>পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)</label><input id="uP" autocomplete="off"></div>
+        </div>
+        <button class="btn btn-navy" id="uAdd" style="margin-top:14px">শিক্ষক অ্যাকাউন্ট তৈরি করুন</button><div class="msg" id="uMsg"></div>
+      </div>
+      <div class="box"><h3>👥 সব অ্যাকাউন্ট</h3>
+        <p class="nolink" style="margin-bottom:10px">কেউ নিজে "শিক্ষক নিবন্ধন" করলে এখানে "অপেক্ষায়" দেখাবে। "চালু করুন" চাপলে তবেই কাজ করতে পারবেন।</p>
         <div class="scroll-x"><table class="tbl"><thead><tr><th>নাম</th><th>ইমেইল</th><th>ভূমিকা</th><th>অবস্থা</th><th></th></tr></thead><tbody id="uList"></tbody></table></div></div>
     </div>
   </div>
@@ -162,6 +186,7 @@
 
 <div class="modal" id="modal"><div class="in" id="modalIn"></div></div>
 
+<script src="config.js"></script>
 <script src="common.js"></script>
 <script>
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
@@ -189,26 +214,41 @@ $("#tLogin").onclick=()=>setMode(false);$("#tReg").onclick=()=>setMode(true);
 function setMode(r){regMode=r;$("#tLogin").classList.toggle("on",!r);$("#tReg").classList.toggle("on",r);
   $("#nmRow").style.display=r?"block":"none";$("#regNote").style.display=r?"block":"none";
   $("#lbtn").textContent=r?"নিবন্ধন করুন":"লগইন করুন";say($("#lmsg"),"");$("#pw").autocomplete=r?"new-password":"current-password"}
+function friendly(msg){
+  if(/Invalid login/i.test(msg))return "ইমেইল বা পাসওয়ার্ড ভুল হয়েছে।";
+  if(/not confirmed/i.test(msg))return "ইমেইল কনফার্ম হয়নি। Supabase → Authentication → Sign In / Providers → Email-এ গিয়ে \"Confirm email\" বন্ধ করুন (LOGIN_SETUP.md ধাপ ৩), তারপর আবার চেষ্টা করুন।";
+  if(/already registered/i.test(msg))return "এই ইমেইল আগেই নিবন্ধিত। \"লগইন\" ট্যাবে যান।";
+  if(/at least 6|weak/i.test(msg))return "পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের দিন।";
+  if(/rate limit/i.test(msg))return "অনেকবার চেষ্টা করা হয়েছে। কিছুক্ষণ পর আবার চেষ্টা করুন।";
+  return msg;}
 $("#lf").addEventListener("submit",async e=>{e.preventDefault();const m=$("#lmsg");say(m,"অপেক্ষা করুন...",true);
   const email=$("#em").value.trim(),password=$("#pw").value;
-  if(regMode){
-    const r=await client.auth.signUp({email,password,options:{data:{name:$("#nm").value}}});
-    if(r.error)return say(m,r.error.message);
-    if(r.data.user&&$("#nm").value){/* নাম পরে প্রোফাইলে বসবে */ }
-    say(m,"নিবন্ধন হয়েছে। অ্যাডমিন চালু করলে লগইন করতে পারবেন।",true);
-  }else{
-    const r=await client.auth.signInWithPassword({email,password});
-    if(r.error)return say(m,"ইমেইল বা পাসওয়ার্ড ভুল।");
-    boot();}});
+  try{
+    if(regMode){
+      const r=await client.auth.signUp({email,password,options:{data:{name:$("#nm").value.trim()}}});
+      if(r.error)return say(m,friendly(r.error.message));
+      if(r.data&&r.data.user&&r.data.user.identities&&r.data.user.identities.length===0)return say(m,friendly("already registered"));
+      if(r.data&&r.data.session){say(m,"নিবন্ধন সফল!",true);return boot();}
+      say(m,"নিবন্ধন হয়েছে, কিন্তু ইমেইল কনফার্মেশন চালু আছে। ইমেইলের লিংকে ক্লিক করুন, অথবা অ্যাডমিনকে Supabase-এ \"Confirm email\" বন্ধ করতে বলুন। তারপর লগইন করুন।",true);
+    }else{
+      const r=await client.auth.signInWithPassword({email,password});
+      if(r.error)return say(m,friendly(r.error.message));
+      boot();}
+  }catch(err){say(m,"সংযোগ সমস্যা: ইন্টারনেট ও config.js-এর URL ঠিক আছে কিনা দেখুন।")}});
 async function logout(){await client.auth.signOut();location.reload()}
 
 /* ---- ড্যাশবোর্ড ---- */
+function waitView(title,msg,sql){show("wait");$("#waitTitle").textContent=title;$("#waitMsg").textContent=msg;
+  $("#waitSql").style.display=sql?"block":"none";if(sql)$("#sqlTxt").textContent=sql}
 async function boot(){
   const s=await client.auth.getSession();me=s.data.session&&s.data.session.user;
   if(!me)return show("login");
-  const p=await client.from("profiles").select("*").eq("id",me.id).single();
+  const p=await client.from("profiles").select("*").eq("id",me.id).maybeSingle();
   prof=p.data;
-  if(!prof||!prof.active)return show("wait");
+  const adminSql="update public.profiles set role = 'admin', active = true where email = '"+(me.email||"").replace(/'/g,"")+"';";
+  if(p.error)return waitView("⚠️ ডাটাবেস সেটআপ সম্পূর্ণ নয়","প্রোফাইল টেবিল পড়া যায়নি। Supabase-এর SQL Editor-এ supabase_setup.sql পুরোটা চালিয়েছেন কিনা দেখুন। ("+(p.error.message||"")+")",null);
+  if(!prof)return waitView("⚠️ আপনার প্রোফাইল তৈরি হয়নি","supabase_setup.sql আবার চালান (এতে আগের ব্যবহারকারীদের প্রোফাইলও তৈরি হয়), তারপর পেজ রিফ্রেশ করুন। আপনিই মালিক হলে নিচের লাইনটিও চালাতে পারেন।","insert into public.profiles (id,email,name,role,active) select id,email,split_part(email,'@',1),'admin',true from auth.users where email = '"+(me.email||"").replace(/'/g,"")+"' on conflict (id) do update set role='admin', active=true;");
+  if(!prof.active)return waitView("⏳ অ্যাকাউন্ট অনুমোদনের অপেক্ষায়","আপনার ইমেইল: "+me.email+"। অ্যাডমিন আপনার অ্যাকাউন্ট চালু করলে আপনি কাজ করতে পারবেন।",adminSql);
   show("dash");
   $("#whoName").textContent=prof.name||prof.email;
   $("#whoRole").textContent=prof.role==="admin"?"অ্যাডমিন":"শিক্ষক";
@@ -322,6 +362,38 @@ async function loadUsers(){
    <td>${self?"(আপনি)":`<button class="sm ${u.active?"del":"ok"}" data-a="${u.id}" data-v="${u.active?0:1}">${u.active?"বন্ধ করুন":"চালু করুন"}</button>`}</td></tr>`}).join("");
   $$("#uList [data-a]").forEach(b=>b.onclick=async()=>{await client.from("profiles").update({active:b.dataset.v==="1"}).eq("id",b.dataset.a);loadUsers()});
   $$("#uList [data-r]").forEach(s=>s.onchange=async()=>{await client.from("profiles").update({role:s.value}).eq("id",s.dataset.r);loadUsers()});}
+
+$("#uAdd").onclick=async()=>{const m=$("#uMsg"),n=$("#uN").value.trim(),e=$("#uE").value.trim(),pw=$("#uP").value;
+  if(!n||!e||pw.length<6)return say(m,"নাম, ইমেইল ও কমপক্ষে ৬ অক্ষরের পাসওয়ার্ড দিন");
+  try{say(m,"তৈরি হচ্ছে...",true);
+    const tmp=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}});
+    const r=await tmp.auth.signUp({email:e,password:pw,options:{data:{name:n}}});
+    if(r.error)throw friendly(r.error.message);
+    const u=r.data&&r.data.user;
+    if(!u||(u.identities&&u.identities.length===0))throw "এই ইমেইল দিয়ে আগেই অ্যাকাউন্ট আছে।";
+    const up=await client.from("profiles").update({active:true,name:n,role:"teacher"}).eq("id",u.id);
+    if(up.error)throw up.error.message;
+    say(m,"✓ তৈরি হয়েছে। শিক্ষককে জানান: ইমেইল "+e+" ও আপনার দেওয়া পাসওয়ার্ড। লগইন পেজ: admin.html"+(r.data.session?"":" (দ্রষ্টব্য: Supabase-এ \"Confirm email\" চালু থাকলে শিক্ষককে ইমেইলের লিংকে ক্লিক করতে হবে)"),true);
+    ["uN","uE","uP"].forEach(i=>$("#"+i).value="");loadUsers()}catch(x){say(m,"ত্রুটি: "+x)}};
+$("#sqlCopy").onclick=async()=>{try{await navigator.clipboard.writeText($("#sqlTxt").textContent);$("#sqlCopy").textContent="✓ কপি হয়েছে"}catch(_){const r=document.createRange();r.selectNodeContents($("#sqlTxt"));const s=getSelection();s.removeAllRanges();s.addRange(r)}};
+
+/* সংযোগ সেটআপ উইজার্ড */
+function loadLib(){return new Promise((res,rej)=>{if(window.supabase)return res();const s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js";s.onload=res;s.onerror=()=>rej();document.head.appendChild(s)})}
+$("#cfgTest").onclick=async()=>{const m=$("#cfgMsg"),url=$("#cfgUrl").value.trim().replace(/\/+$/,""),key=$("#cfgKey").value.trim();$("#cfgOut").style.display="none";
+  if(!/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(url))return say(m,"Project URL ঠিক নয়। এরকম হতে হবে: https://xxxxxxxx.supabase.co");
+  if(key.length<20)return say(m,"anon key বসান।");
+  let role="";try{role=JSON.parse(atob(key.split(".")[1].replace(/-/g,"+").replace(/_/g,"/"))).role}catch(_){}
+  if(role==="service_role"||/^sb_secret_/.test(key))return say(m,"⛔ এটা গোপন (secret/service_role) কী, সাইটে বসাবেন না! anon / publishable কী নিন।");
+  try{say(m,"পরীক্ষা চলছে...",true);await loadLib();
+    const c=window.supabase.createClient(url,key);const r=await c.from("settings").select("key").limit(1);
+    if(r.error){const t=(r.error.code||"")+" "+(r.error.message||"");
+      if(/42P01|PGRST205|does not exist|schema cache/i.test(t))return say(m,"সংযোগ হয়েছে কিন্তু টেবিল নেই। Supabase-এ supabase_setup.sql পুরোটা চালান (ধাপ ২), তারপর আবার পরীক্ষা করুন।");
+      if(/api key|JWT|apikey/i.test(t))return say(m,"anon key ভুল। Settings → API থেকে আবার কপি করুন।");
+      return say(m,"সমস্যা: "+t)}
+    say(m,"✓ সংযোগ সফল!",true);
+    $("#cfgTxt").textContent='const SUPABASE_URL = "'+url+'";\nconst SUPABASE_KEY = "'+key+'";\n';$("#cfgOut").style.display="block";
+  }catch(e){say(m,"Supabase-এ পৌঁছানো যায়নি। URL ঠিক আছে কিনা ও ইন্টারনেট দেখুন।")}};
+$("#cfgCopy").onclick=async()=>{try{await navigator.clipboard.writeText($("#cfgTxt").textContent);$("#cfgCopy").textContent="✓ কপি হয়েছে"}catch(_){const r=document.createRange();r.selectNodeContents($("#cfgTxt"));const s=getSelection();s.removeAllRanges();s.addRange(r)}};
 
 (async()=>{client=await dbReady;if(!client)return show("setup");
   client.auth.onAuthStateChange(()=>{});boot()})();

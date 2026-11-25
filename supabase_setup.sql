@@ -14,9 +14,14 @@ create table if not exists public.profiles (
 
 create or replace function public.handle_new_user() returns trigger
 language plpgsql security definer set search_path = public as $$
+declare first_user boolean;
 begin
-  insert into public.profiles (id, email, name)
-  values (new.id, new.email, split_part(new.email, '@', 1))
+  select not exists (select 1 from public.profiles) into first_user;
+  insert into public.profiles (id, email, name, role, active)
+  values (new.id, new.email,
+          coalesce(nullif(new.raw_user_meta_data->>'name',''), split_part(new.email, '@', 1)),
+          case when first_user then 'admin' else 'teacher' end,
+          first_user)
   on conflict do nothing;
   return new;
 end $$;
@@ -184,7 +189,9 @@ create policy "docs admin delete" on storage.objects for delete to authenticated
   using (bucket_id = 'docs' and public.is_admin());
 
 -- ৫) এখনকার ছবি/তথ্য ডাটাবেসে তুলে রাখা (যাতে অ্যাডমিন প্যানেল থেকে বদলানো ও মোছা যায়)
-insert into public.gallery (url, caption, category, created_at) values
+do $$ begin
+ if not exists (select 1 from public.gallery) then
+  insert into public.gallery (url, caption, category, created_at) values
  ('images/slide1.jpg','প্রসপেক্টাস ও ভর্তি','banner', now() - interval '12 minutes'),
  ('images/slide2.jpg','এম.কে. অ্যাকাডেমী','banner', now() - interval '11 minutes'),
  ('images/slide3.jpg','আমাদের শিক্ষকবৃন্দ','banner', now() - interval '10 minutes'),
@@ -197,13 +204,21 @@ insert into public.gallery (url, caption, category, created_at) values
  ('images/g7.jpg','আমাদের শিক্ষার্থীরা','students', now() - interval '3 minutes'),
  ('images/g8.jpg','অ্যাবাকাস প্রতিযোগিতায় সাফল্য','compete', now() - interval '2 minutes'),
  ('images/g9.jpg','ম্যাথ কম্পিটিশনের উপহার','compete', now() - interval '1 minutes');
+ end if;
+end $$;
 
-insert into public.slides (url, caption, sort) values
+do $$ begin
+ if not exists (select 1 from public.slides) then
+  insert into public.slides (url, caption, sort) values
  ('images/slide1.jpg','প্রসপেক্টাস',1),
  ('images/slide2.jpg','এম.কে. অ্যাকাডেমী',2),
  ('images/slide3.jpg','শিক্ষকবৃন্দ',3);
+ end if;
+end $$;
 
-insert into public.staff (kind, name, role_title, qualification, photo_url, sort) values
+do $$ begin
+ if not exists (select 1 from public.staff) then
+  insert into public.staff (kind, name, role_title, qualification, photo_url, sort) values
  ('leader','মোঃ খাবিরুদ্দিন সেখ','পরিচালক','','images/lead1.jpg',1),
  ('leader','মোঃ ফজলুল হক (বাবু)','প্রধান শিক্ষক','B-Tech','images/lead2.jpg',2),
  ('teacher','','','','images/t1.jpg',11),
@@ -220,14 +235,30 @@ insert into public.staff (kind, name, role_title, qualification, photo_url, sort
  ('teacher','','','','images/t12.jpg',22),
  ('teacher','','','','images/t13.jpg',23),
  ('teacher','','','','images/t14.jpg',24);
+ end if;
+end $$;
 
-insert into public.notices (text, is_new, created_at) values
+do $$ begin
+ if not exists (select 1 from public.notices) then
+  insert into public.notices (text, is_new, created_at) values
  ('নতুন শিক্ষাবর্ষের অনলাইন ভর্তি শুরু হয়েছে।', true, now() - interval '3 minutes'),
  ('ভর্তির জন্য শিক্ষার্থীর জন্মসনদ ও অভিভাবকের মোবাইল নম্বর প্রস্তুত রাখুন।', false, now() - interval '2 minutes'),
  ('আবেদন জমা দেওয়ার পর প্রিন্ট কপি স্কুলে জমা দিতে হবে।', false, now() - interval '1 minutes');
+ end if;
+end $$;
+
+-- আগে থেকে নিবন্ধন করা ব্যবহারকারীদের প্রোফাইল বানানো
+insert into public.profiles (id, email, name)
+select id, email, split_part(email, '@', 1) from auth.users
+on conflict do nothing;
+
+-- কোনো অ্যাডমিন না থাকলে সবচেয়ে প্রথম নিবন্ধন করা ব্যক্তি (স্কুলের মালিক) অ্যাডমিন হবেন
+update public.profiles set role = 'admin', active = true
+where id = (select u.id from auth.users u join public.profiles p on p.id = u.id order by u.created_at limit 1)
+  and not exists (select 1 from public.profiles where role = 'admin');
 
 -- ============================================================
--- এরপর (আপনার ইমেইল বসিয়ে) অ্যাডমিন বানাতে এই লাইনটি আলাদা করে RUN করুন:
+-- (শুধু দরকার হলে) নির্দিষ্ট ইমেইলকে অ্যাডমিন বানাতে অ্যাডমিন বানাতে এই লাইনটি আলাদা করে RUN করুন:
 --
 -- update public.profiles set role = 'admin', active = true where email = 'আপনার-ইমেইল@gmail.com';
 -- ============================================================

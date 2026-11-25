@@ -46,7 +46,7 @@
 .dz b{display:block;color:var(--navy);font-size:.95rem;line-height:1.3}
 .dz b em{color:var(--red);font-style:normal}
 .dz span{display:block;font-size:.78rem;color:var(--muted);word-break:break-all}
-.dz input{display:none}
+.dz input[type=file]{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none}
 .dz .rm{position:absolute;top:8px;right:8px;width:26px;height:26px;border-radius:50%;border:0;background:#fde4e4;color:#c0392b;font-weight:700;cursor:pointer;display:none}
 .dz.has .rm{display:block}
 .f input.bad,.f select.bad{border-color:#c0392b!important;background:#fff3f2!important;box-shadow:0 0 0 4px rgba(192,57,43,.12)}
@@ -178,6 +178,7 @@
   <div class="receipt doc-page" id="rdocs" style="margin-top:24px"></div>
 </div></div>
 
+<script src="config.js"></script>
 <script src="common.js"></script>
 <script>
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
@@ -195,10 +196,10 @@ const DEFS=[
 ];
 const docs={};
 $("#ups").innerHTML=DEFS.map(d=>`<label class="dz" id="dz-${d.k}">
+  <input type="file" id="fi-${d.k}" accept="${d.acc}">
   <div class="ico" id="ic-${d.k}">${d.ic}</div>
   <div><b>${d.l} ${d.req?"<em>*</em>":""}</b><span id="nm-${d.k}">${d.h} · ক্লিক বা ড্র্যাগ করুন</span></div>
-  <button type="button" class="rm" aria-label="মুছুন" id="rm-${d.k}">×</button>
-  <input type="file" id="fi-${d.k}" accept="${d.acc}"></label>`).join("");
+  <button type="button" class="rm" aria-label="মুছুন" id="rm-${d.k}">×</button></label>`).join("");
 
 function compress(file){return new Promise((res,rej)=>{
   if(file.type==="application/pdf"){

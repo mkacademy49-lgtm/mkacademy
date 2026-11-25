@@ -12,9 +12,8 @@ const SCHOOL = {
   SCRIPT_URL: ""
 };
 
-/* ===== লগইন ও ডাটাবেস (Supabase) — LOGIN_SETUP.md দেখে এই দুটি বসান ===== */
-const SUPABASE_URL = "";   // যেমন: https://abcdxyz.supabase.co
-const SUPABASE_KEY = "";   // anon public key
+/* ===== লগইন ও ডাটাবেস (Supabase) — config.js ফাইলে URL ও KEY বসাতে হবে ===== */
+// SUPABASE_URL ও SUPABASE_KEY এখন config.js ফাইলে আছে
 
 let sb = null;
 const dbReady = new Promise(res => {
