@@ -81,6 +81,14 @@
   </div>
 </section>
 
+<section id="fees" style="background:linear-gradient(180deg,#f6f8fc,#eaf0fc)">
+  <div class="container">
+    <div class="sec-head reveal"><span class="tag">ফি কাঠামো</span><h2>শ্রেণি অনুযায়ী ভর্তি ও মাসিক ফি</h2><p>অনাবাসিক ও ডে-বোর্ডিং, দুটি স্তরেই সাশ্রয়ী ও স্বচ্ছ ফি।</p><div class="bar"></div></div>
+    <div id="feeHome" class="reveal"></div>
+    <div style="text-align:center;margin-top:28px" class="reveal"><a href="admission.html" class="btn btn-gold">এখনই আবেদন করুন →</a></div>
+  </div>
+</section>
+
 <section>
   <div class="container split">
     <div class="visual reveal"><img src="images/logo.png" alt="M K Academy" style="height:300px;width:auto;position:relative;z-index:2"></div>
@@ -147,6 +155,8 @@
 
 <script src="config.js"></script>
 <script src="common.js"></script>
+<script src="fees.js"></script>
+<script>const feeHome=document.getElementById("feeHome");FEES.render(feeHome,"an");settingsReady.then(()=>FEES.render(feeHome,"an"));</script>
 <script>
 (function(){
   const sl=document.getElementById("slides"),dots=document.getElementById("dots"),box=document.getElementById("slider");

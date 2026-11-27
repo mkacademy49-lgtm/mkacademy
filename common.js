@@ -29,6 +29,7 @@ const pages = [
   ["index.html", "হোম"],
   ["about.html", "আমাদের সম্পর্কে"],
   ["teachers.html", "শিক্ষকবৃন্দ"],
+  ["fees.html", "ফি কাঠামো"],
   ["gallery.html", "গ্যালারি"],
   ["results.html", "ফলাফল"],
   ["contact.html", "Contact Us"],

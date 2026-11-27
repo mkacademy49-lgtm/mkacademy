@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ফি কাঠামো | M K Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="page-hero"><div class="container"><div class="crumb">হোম › ফি কাঠামো</div><h2>ভর্তি ও মাসিক ফি</h2><p>শ্রেণি অনুযায়ী স্বচ্ছ ও সাশ্রয়ী ফি কাঠামো</p></div></div>
+
+<section>
+  <div class="container">
+    <div id="feeWrap"></div>
+    <div style="text-align:center;margin-top:34px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a href="admission.html" class="btn btn-gold">এখনই অনলাইনে আবেদন করুন →</a>
+      <a href="contact.html" class="btn btn-navy">📞 যোগাযোগ করুন</a>
+    </div>
+  </div>
+</section>
+
+<script src="config.js"></script>
+<script src="common.js"></script>
+<script src="fees.js"></script>
+<script>
+const feeEl = document.getElementById("feeWrap");
+FEES.render(feeEl, "an");
+settingsReady.then(() => FEES.render(feeEl, "an"));
+</script>
+</body>
+</html>

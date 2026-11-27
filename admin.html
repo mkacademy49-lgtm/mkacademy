@@ -192,6 +192,22 @@
       </div>
     </div>
 
+    <div class="panel" id="p-fees">
+      <div class="box"><h3>💰 ফি কাঠামো সম্পাদনা</h3>
+        <p class="nolink" style="margin-bottom:12px">এখানে বদলালে সাইটের "ফি কাঠামো" পেজ ও হোম পেজের ফি-র সেকশন সঙ্গে সঙ্গে বদলে যাবে। যে ঘরে ফি নেই (যেমন LKG/UKG-র ডে-বোর্ডিং) সেটা <b>ফাঁকা</b> রাখুন।</p>
+        <div class="row"><div class="f"><label>শিক্ষাবর্ষ</label><input id="fYear" placeholder="2026"></div><div class="f full"><label>অন্যান্য তথ্য (যেমন গাড়ি ভাড়া)</label><input id="fNote"></div></div>
+        <div class="scroll-x" style="margin-top:14px"><table class="tbl"><thead><tr>
+          <th>শ্রেণি</th><th>অনাবাসিক ভর্তি ফি</th><th>মাসিক স্কুল ফি</th><th>ডে-বোর্ডিং ভর্তি ফি</th><th>সকালের টিউশন</th><th>বিকালের টিউশন</th><th>লাঞ্চ ফি</th><th>মাসিক মোট (ডে-বোর্ডিং)</th><th></th></tr></thead><tbody id="fRows"></tbody></table></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
+          <button class="btn btn-navy" id="fSave">💾 সংরক্ষণ করুন</button>
+          <button class="btn btn-line" id="fAdd" type="button">➕ নতুন শ্রেণি যোগ</button>
+          <button class="btn btn-line" id="fCalc" type="button">🧮 ডে-বোর্ডিং মোট নিজে হিসাব করুন</button>
+          <button class="btn btn-line" id="fReset" type="button">↩ আসল ফিতে ফেরান</button>
+        </div><div class="msg" id="fMsg"></div>
+      </div>
+      <div class="box"><h3>👁️ সাইটে যেমন দেখাবে (ডে-বোর্ডিং)</h3><div id="fPrev"></div></div>
+    </div>
+
     <div class="panel" id="p-users">
       <div class="box"><h3>➕ নতুন শিক্ষকের লগইন তৈরি করুন</h3>
         <p class="nolink" style="margin-bottom:10px">নাম, ইমেইল ও একটি পাসওয়ার্ড দিন। অ্যাকাউন্ট সঙ্গে সঙ্গে চালু হবে। এরপর শিক্ষককে ইমেইল ও পাসওয়ার্ডটি জানিয়ে দিন।</p>
@@ -214,6 +230,7 @@
 <script src="config.js"></script>
 <script src="common.js"></script>
 <script src="result-card.js"></script>
+<script src="fees.js"></script>
 <script>
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -279,11 +296,11 @@ async function boot(){
   $("#whoName").textContent=prof.name||prof.email;
   $("#whoRole").textContent=prof.role==="admin"?"অ্যাডমিন":"শিক্ষক";
   const admin=prof.role==="admin";
-  const tabs=[["gallery","📷 গ্যালারি"],["notices","📢 নোটিশ"],["results","📝 ফলাফল"]].concat(admin?[["slides","🖼️ স্লাইডার"],["staff","👨‍🏫 শিক্ষকবৃন্দ"],["settings","⚙️ স্কুলের তথ্য"],["adm","📋 ভর্তির আবেদন"],["users","👥 অ্যাকাউন্ট"]]:[]);
+  const tabs=[["gallery","📷 গ্যালারি"],["notices","📢 নোটিশ"],["results","📝 ফলাফল"]].concat(admin?[["slides","🖼️ স্লাইডার"],["staff","👨‍🏫 শিক্ষকবৃন্দ"],["fees","💰 ফি"],["settings","⚙️ স্কুলের তথ্য"],["adm","📋 ভর্তির আবেদন"],["users","👥 অ্যাকাউন্ট"]]:[]);
   $("#dtabs").innerHTML=tabs.map((t,i)=>`<button data-t="${t[0]}" class="${i?"":"on"}">${t[1]}</button>`).join("");
   $$("#dtabs button").forEach(b=>b.onclick=()=>openTab(b.dataset.t));
   openTab("gallery");}
-const loaders={gallery:loadGallery,notices:loadNotices,slides:loadSlides,staff:loadStaff,settings:loadSettings,adm:loadAdm,users:loadUsers,results:()=>loadResults()};
+const loaders={gallery:loadGallery,notices:loadNotices,slides:loadSlides,staff:loadStaff,settings:loadSettings,adm:loadAdm,users:loadUsers,results:()=>loadResults(),fees:()=>loadFees()};
 function openTab(t){$$("#dtabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));
   $$(".panel").forEach(p=>p.classList.toggle("on",p.id==="p-"+t));loaders[t]()}
 const isAdmin=()=>prof&&prof.role==="admin";
@@ -426,5 +443,6 @@ $("#cfgCopy").onclick=async()=>{try{await navigator.clipboard.writeText($("#cfgT
   client.auth.onAuthStateChange(()=>{});boot()})();
 </script>
 <script src="admin-results.js"></script>
+<script src="admin-fees.js"></script>
 </body>
 </html>
