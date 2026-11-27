@@ -22,6 +22,10 @@
   <div class="dots" id="dots"></div>
 </div>
 
+<div class="ticker" id="ticker" aria-label="নোটিশ">
+  <div class="tk-label"><i></i>📢 নোটিশ</div>
+  <div class="tk-view"><div class="tk-track" id="tkTrack"></div></div>
+</div>
 
 <section class="hero">
   <div class="container">
@@ -165,6 +169,20 @@ function feeTeaser(){
 feeTeaser();settingsReady.then(feeTeaser);
 </script>
 <script>
+/* চলন্ত নোটিশ (স্লাইডারের নিচে) */
+function buildTicker(list){
+  const tr=document.getElementById("tkTrack");if(!tr||!list.length)return;
+  const one=list.map(x=>`<span class="tk-i">${x}</span>`).join("");
+  tr.style.animation="none";tr.innerHTML='<div class="tk-set">'+one+'</div>';
+  const view=tr.parentElement.offsetWidth||1000;let set=tr.firstChild,n=0;
+  while(set.offsetWidth<view&&n++<8)set.innerHTML+=one;
+  tr.innerHTML=set.outerHTML+set.outerHTML;
+  tr.style.animation="";tr.style.animationDuration=Math.max(14,tr.firstChild.offsetWidth/70)+"s";
+}
+function tickerFromList(){buildTicker([...document.querySelectorAll("#noticeList li")].map(li=>li.innerHTML))}
+tickerFromList();addEventListener("resize",()=>{clearTimeout(window.__tkT);window.__tkT=setTimeout(tickerFromList,300)});
+</script>
+<script>
 (function(){
   const sl=document.getElementById("slides"),dots=document.getElementById("dots"),box=document.getElementById("slider");
   let i=0,n=0,t;
@@ -190,7 +208,7 @@ feeTeaser();settingsReady.then(feeTeaser);
       const q=await c.from("notices").select("*").order("created_at",{ascending:false}).limit(8);
       if(q.data&&q.data.length){
         const e=v=>String(v||"").replace(/[&<>]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[m]));
-        document.getElementById("noticeList").innerHTML=q.data.map(n=>`<li>${n.is_new?'<span class="new">NEW</span>':"📌"} ${e(n.text)}</li>`).join("");}
+        document.getElementById("noticeList").innerHTML=q.data.map(n=>`<li>${n.is_new?'<span class="new">NEW</span>':"📌"} ${e(n.text)}</li>`).join("");tickerFromList();}
     }catch(e){}
   });
 })();
