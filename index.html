@@ -83,9 +83,9 @@
 
 <section id="fees" style="background:linear-gradient(180deg,#f6f8fc,#eaf0fc)">
   <div class="container">
-    <div class="sec-head reveal"><span class="tag">ফি কাঠামো</span><h2>শ্রেণি অনুযায়ী ভর্তি ও মাসিক ফি</h2><p>অনাবাসিক ও ডে-বোর্ডিং, দুটি স্তরেই সাশ্রয়ী ও স্বচ্ছ ফি।</p><div class="bar"></div></div>
-    <div id="feeHome" class="reveal"></div>
-    <div style="text-align:center;margin-top:28px" class="reveal"><a href="admission.html" class="btn btn-gold">এখনই আবেদন করুন →</a></div>
+    <div class="sec-head reveal"><span class="tag">ফি কাঠামো</span><h2>সাশ্রয়ী ও স্বচ্ছ ফি</h2><p>অনাবাসিক ও ডে-বোর্ডিং, দুটি স্তরেই শ্রেণি অনুযায়ী ফি।</p><div class="bar"></div></div>
+    <div class="grid reveal" id="feeTeaser" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;max-width:900px;margin:0 auto"></div>
+    <div style="text-align:center;margin-top:28px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap" class="reveal"><a href="fees.html" class="btn btn-navy">সম্পূর্ণ ফি কাঠামো দেখুন →</a><a href="admission.html" class="btn btn-gold">এখনই আবেদন করুন</a></div>
   </div>
 </section>
 
@@ -156,7 +156,14 @@
 <script src="config.js"></script>
 <script src="common.js"></script>
 <script src="fees.js"></script>
-<script>const feeHome=document.getElementById("feeHome");FEES.render(feeHome,"an");settingsReady.then(()=>FEES.render(feeHome,"an"));</script>
+<script>
+function feeTeaser(){
+  const d=FEES.get(),box=document.getElementById("feeTeaser"),min=a=>a.length?Math.min(...a):null,v=k=>d.rows.map(r=>r[k]).filter(FEES.has).map(Number);
+  const items=[["🏫","অনাবাসিক","মাসিক স্কুল ফি শুরু",min(v("m"))],["🍱","ডে-বোর্ডিং (খাবার সহ)","মাসিক মোট শুরু",min(v("t"))],["📝","ভর্তি ফি","শুরু",min(v("a"))]];
+  box.innerHTML=items.filter(i=>i[3]!==null).map(i=>`<div class="card" style="text-align:center"><div class="ic">${i[0]}</div><h3>${i[1]}</h3><p>${i[2]}</p><div style="font-size:1.9rem;font-weight:800;color:var(--navy);margin-top:6px">${FEES.money(i[3])}<small style="font-size:.9rem;color:var(--muted)"> থেকে</small></div></div>`).join("");
+}
+feeTeaser();settingsReady.then(feeTeaser);
+</script>
 <script>
 (function(){
   const sl=document.getElementById("slides"),dots=document.getElementById("dots"),box=document.getElementById("slider");
