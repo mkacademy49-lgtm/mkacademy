@@ -1,15 +1,12 @@
-<!DOCTYPE html>
-<html lang="bn">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<meta charset="utf-8">
 <title>M K Academy | Samsherganj, Murshidabad</title>
 <meta name="description" content="M K Academy, Malancha, Samsherganj, Murshidabad. অনলাইন ভর্তি চলছে।">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
-</head>
-<body>
+
+
 
 <div class="slider" id="slider" aria-label="স্কুলের ছবি">
   <div class="slides" id="slides">
@@ -22,10 +19,6 @@
   <div class="dots" id="dots"></div>
 </div>
 
-<div class="ticker" id="ticker" aria-label="নোটিশ">
-  <div class="tk-label"><i></i>📢 নোটিশ</div>
-  <div class="tk-view"><div class="tk-track" id="tkTrack"></div></div>
-</div>
 
 <section class="hero">
   <div class="container">
@@ -82,14 +75,6 @@
       <div class="level reveal" style="--c:#143d85"><b>Class 9 – 10</b><span>মাধ্যমিক</span><p>বোর্ড পরীক্ষার জন্য নিয়মিত প্রস্তুতি।</p></div>
       <div class="level reveal" style="--c:#6a2c91"><b>Class 11 – 12</b><span>উচ্চ মাধ্যমিক</span><p>ভবিষ্যৎ ক্যারিয়ারের জন্য প্রস্তুতি।</p></div>
     </div>
-  </div>
-</section>
-
-<section id="fees" style="background:linear-gradient(180deg,#f6f8fc,#eaf0fc)">
-  <div class="container">
-    <div class="sec-head reveal"><span class="tag">ফি কাঠামো</span><h2>সাশ্রয়ী ও স্বচ্ছ ফি</h2><p>অনাবাসিক ও ডে-বোর্ডিং, দুটি স্তরেই শ্রেণি অনুযায়ী ফি।</p><div class="bar"></div></div>
-    <div class="grid reveal" id="feeTeaser" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;max-width:900px;margin:0 auto"></div>
-    <div style="text-align:center;margin-top:28px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap" class="reveal"><a href="fees.html" class="btn btn-navy">সম্পূর্ণ ফি কাঠামো দেখুন →</a><a href="admission.html" class="btn btn-gold">এখনই আবেদন করুন</a></div>
   </div>
 </section>
 
@@ -159,29 +144,7 @@
 
 <script src="config.js"></script>
 <script src="common.js"></script>
-<script src="fees.js"></script>
-<script>
-function feeTeaser(){
-  const d=FEES.get(),box=document.getElementById("feeTeaser"),min=a=>a.length?Math.min(...a):null,v=k=>d.rows.map(r=>r[k]).filter(FEES.has).map(Number);
-  const items=[["🏫","অনাবাসিক","মাসিক স্কুল ফি শুরু",min(v("m"))],["🍱","ডে-বোর্ডিং (খাবার সহ)","মাসিক মোট শুরু",min(v("t"))],["📝","ভর্তি ফি","শুরু",min(v("a"))]];
-  box.innerHTML=items.filter(i=>i[3]!==null).map(i=>`<div class="card" style="text-align:center"><div class="ic">${i[0]}</div><h3>${i[1]}</h3><p>${i[2]}</p><div style="font-size:1.9rem;font-weight:800;color:var(--navy);margin-top:6px">${FEES.money(i[3])}<small style="font-size:.9rem;color:var(--muted)"> থেকে</small></div></div>`).join("");
-}
-feeTeaser();settingsReady.then(feeTeaser);
-</script>
-<script>
-/* চলন্ত নোটিশ (স্লাইডারের নিচে) */
-function buildTicker(list){
-  const tr=document.getElementById("tkTrack");if(!tr||!list.length)return;
-  const one=list.map(x=>`<span class="tk-i">${x}</span>`).join("");
-  tr.style.animation="none";tr.innerHTML='<div class="tk-set">'+one+'</div>';
-  const view=tr.parentElement.offsetWidth||1000;let set=tr.firstChild,n=0;
-  while(set.offsetWidth<view&&n++<8)set.innerHTML+=one;
-  tr.innerHTML=set.outerHTML+set.outerHTML;
-  tr.style.animation="";tr.style.animationDuration=Math.max(14,tr.firstChild.offsetWidth/70)+"s";
-}
-function tickerFromList(){buildTicker([...document.querySelectorAll("#noticeList li")].map(li=>li.innerHTML))}
-tickerFromList();addEventListener("resize",()=>{clearTimeout(window.__tkT);window.__tkT=setTimeout(tickerFromList,300)});
-</script>
+<script src="popup.js"></script>
 <script>
 (function(){
   const sl=document.getElementById("slides"),dots=document.getElementById("dots"),box=document.getElementById("slider");
@@ -208,10 +171,10 @@ tickerFromList();addEventListener("resize",()=>{clearTimeout(window.__tkT);windo
       const q=await c.from("notices").select("*").order("created_at",{ascending:false}).limit(8);
       if(q.data&&q.data.length){
         const e=v=>String(v||"").replace(/[&<>]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[m]));
-        document.getElementById("noticeList").innerHTML=q.data.map(n=>`<li>${n.is_new?'<span class="new">NEW</span>':"📌"} ${e(n.text)}</li>`).join("");tickerFromList();}
+        document.getElementById("noticeList").innerHTML=q.data.map(n=>`<li>${n.is_new?'<span class="new">NEW</span>':"📌"} ${e(n.text)}</li>`).join("");}
     }catch(e){}
   });
 })();
 </script>
-</body>
-</html>
+
+</body></html>

@@ -29,9 +29,7 @@ const pages = [
   ["index.html", "হোম"],
   ["about.html", "আমাদের সম্পর্কে"],
   ["teachers.html", "শিক্ষকবৃন্দ"],
-  ["fees.html", "ফি কাঠামো"],
   ["gallery.html", "গ্যালারি"],
-  ["results.html", "ফলাফল"],
   ["contact.html", "Contact Us"],
   ["admission.html", "অনলাইন ভর্তি", "cta"]
 ];
@@ -74,7 +72,7 @@ function buildChrome() {
       <li>🏷️ UDISE+: ${SCHOOL.udise}</li>
     </ul></div>
   </div>
-  <div class="copy">© ${new Date().getFullYear()} ${SCHOOL.name}. সর্বস্বত্ব সংরক্ষিত।<br><span class="credit">Design By - <b>Md Badiujjaman</b></span><br><a class="adm-link" href="admin.html">🔒 অ্যাডমিন / শিক্ষক লগইন</a></div>
+  <div class="copy">© ${new Date().getFullYear()} ${SCHOOL.name}. সর্বস্বত্ব সংরক্ষিত।<br><span class="credit">Design By - <b>Md Badiujjaman</b></span><br><a class="adm-link" href="admin.html">🔒 অ্যাডমিন লগইন</a></div>
 </div></footer>
 <a class="wa" href="https://wa.me/91${SCHOOL.phone}" target="_blank" aria-label="WhatsApp">💬</a>`);
 }

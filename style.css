@@ -245,19 +245,4 @@ header.site{border-bottom:4px solid transparent;border-image:linear-gradient(90d
 .btn-line{background:#fff;border:2px solid #cdd8ee;color:var(--navy)}
 .btn-line:hover{border-color:var(--navy)}
 
-/* ===== চলন্ত নোটিশ বার ===== */
-.ticker{display:flex;align-items:stretch;background:linear-gradient(90deg,#071d44,var(--navy));border-bottom:3px solid var(--gold);box-shadow:0 6px 18px rgba(11,42,91,.25);position:relative;z-index:5}
-.tk-label{flex:none;display:flex;align-items:center;gap:8px;background:var(--red);color:#fff;font-weight:700;padding:0 22px 0 18px;font-size:.95rem;position:relative;z-index:2;clip-path:polygon(0 0,100% 0,calc(100% - 14px) 100%,0 100%);padding-right:30px}
-.tk-label i{width:9px;height:9px;border-radius:50%;background:#fff;animation:tkp 1.2s infinite}
-@keyframes tkp{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}
-.tk-view{flex:1;overflow:hidden;position:relative;min-width:0}
-.tk-view::after{content:"";position:absolute;right:0;top:0;bottom:0;width:40px;background:linear-gradient(90deg,transparent,#0b2a5b);pointer-events:none}
-.tk-track{display:flex;width:max-content;animation:tk 40s linear infinite;will-change:transform}
-.tk-set{display:flex;flex:none}
-.tk-i{color:#fff;white-space:nowrap;padding:13px 0;font-size:.97rem;display:inline-flex;align-items:center;gap:8px}
-.tk-i::after{content:"◆";color:var(--gold);font-size:.7rem;margin:0 34px}
-.tk-i .new{background:var(--red);color:#fff;font-size:.68rem;padding:2px 9px;border-radius:50px;font-weight:700}
-.ticker:hover .tk-track,.ticker:active .tk-track{animation-play-state:paused}
-@keyframes tk{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-@media(max-width:600px){.tk-label{padding:0 22px 0 12px;font-size:.82rem}.tk-i{font-size:.88rem;padding:11px 0}}
-@media(prefers-reduced-motion:reduce){.tk-track{animation-duration:90s}}
+body{font-size:16px}
