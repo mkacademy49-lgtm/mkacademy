@@ -398,6 +398,8 @@ $("#cfgCopy").onclick=async()=>{try{await navigator.clipboard.writeText($("#cfgT
 (async()=>{client=await dbReady;if(!client)return show("setup");
   client.auth.onAuthStateChange(()=>{});boot()})();
 </script>
-<script src="admin-lock.js"></script>
+<script src="admin-fees.js"></script>
+<script src="admin-results.js"></script>
+  <script src="admin-lock.js"></script>
 </body>
 </html>
