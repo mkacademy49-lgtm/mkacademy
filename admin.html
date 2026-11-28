@@ -7,6 +7,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
+#printArea{display:none}
+@media print{body>*:not(#printArea){display:none!important}#printArea{display:block!important}@page{size:A4;margin:8mm}}
 .login-wrap{min-height:70vh;display:grid;place-items:center;padding:50px 0}
 .login-card{background:#fff;border-radius:26px;box-shadow:0 18px 50px rgba(11,42,91,.16);padding:38px 34px;width:min(440px,92vw)}
 .login-card .logo-img{height:70px;margin:0 auto 10px;display:block}
@@ -167,6 +169,45 @@
         <div class="scroll-x"><table class="tbl"><thead><tr><th>আবেদন নং</th><th>নাম</th><th>শ্রেণি</th><th>মোবাইল</th><th>তারিখ</th><th></th></tr></thead><tbody id="aList"></tbody></table></div></div>
     </div>
 
+    <div class="panel" id="p-results">
+      <div class="box"><h3>📝 ফলাফল / মার্কশিট</h3>
+        <div class="row">
+          <div class="f"><label>শিক্ষাবর্ষ</label><input id="rYear" placeholder="2026"></div>
+          <div class="f"><label>শ্রেণি</label><select id="rCls"></select></div>
+          <div class="f"><label>সেকশন</label><input id="rSec" value="A" maxlength="3"></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;margin-top:14px;flex-wrap:wrap"><button class="btn btn-navy" id="rLoad">লোড করুন</button><span id="rState"></span></div>
+        <div class="msg" id="rMsg"></div>
+      </div>
+      <div id="rWork" style="display:none">
+        <div class="tabs-s" id="rTabs" style="margin-bottom:18px"><button data-s="stu">👦 ছাত্রছাত্রী</button><button data-s="mk">📝 নম্বর</button><button data-s="at">📅 হাজিরা</button><button data-s="pub">✅ প্রকাশ ও প্রিন্ট</button></div>
+        <div id="rBody"></div>
+      </div>
+      <div class="box" id="rCfg" style="display:none"><h3>⚙️ ফলাফলের সেটিং (শুধু অ্যাডমিন)</h3>
+        <div class="row"><div class="f"><label>চলতি শিক্ষাবর্ষ (উপরের ঘরের লেখা)</label><button class="sm pri" id="rYearSave" type="button" style="padding:11px">এটাই চলতি বছর হিসেবে সংরক্ষণ</button></div></div>
+        <p class="nolink" style="margin:14px 0 8px">শ্রেণি অনুযায়ী বিষয় ও পূর্ণমান। প্রতি লাইনে: <b>বিষয় | ১ম লিখিত ১ম মৌখিক ২য় লিখিত ২য় মৌখিক বার্ষিক লিখিত বার্ষিক মৌখিক</b> (মৌখিক না থাকলে 0)।</p>
+        <div class="row"><div class="f"><label>শ্রেণি</label><select id="rCfgCls"></select></div></div>
+        <textarea id="rCfgTxt" rows="9" style="width:100%;margin-top:10px;padding:10px;border:1.5px solid #dbe4f5;border-radius:12px;font-family:monospace"></textarea>
+        <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap"><button class="btn btn-navy" id="rCfgSave">সংরক্ষণ</button><button class="btn btn-line" id="rCfgReset">ডিফল্টে ফেরান</button></div><div class="msg" id="rCfgMsg"></div>
+      </div>
+    </div>
+
+    <div class="panel" id="p-fees">
+      <div class="box"><h3>💰 ফি কাঠামো সম্পাদনা</h3>
+        <p class="nolink" style="margin-bottom:12px">এখানে বদলালে সাইটের "ফি কাঠামো" পেজ ও হোম পেজের ফি-র সেকশন সঙ্গে সঙ্গে বদলে যাবে। যে ঘরে ফি নেই (যেমন LKG/UKG-র ডে-বোর্ডিং) সেটা <b>ফাঁকা</b> রাখুন।</p>
+        <div class="row"><div class="f"><label>শিক্ষাবর্ষ</label><input id="fYear" placeholder="2026"></div><div class="f full"><label>অন্যান্য তথ্য (যেমন গাড়ি ভাড়া)</label><input id="fNote"></div></div>
+        <div class="scroll-x" style="margin-top:14px"><table class="tbl"><thead><tr>
+          <th>শ্রেণি</th><th>অনাবাসিক ভর্তি ফি</th><th>মাসিক স্কুল ফি</th><th>ডে-বোর্ডিং ভর্তি ফি</th><th>সকালের টিউশন</th><th>বিকালের টিউশন</th><th>লাঞ্চ ফি</th><th>মাসিক মোট (ডে-বোর্ডিং)</th><th></th></tr></thead><tbody id="fRows"></tbody></table></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
+          <button class="btn btn-navy" id="fSave">💾 সংরক্ষণ করুন</button>
+          <button class="btn btn-line" id="fAdd" type="button">➕ নতুন শ্রেণি যোগ</button>
+          <button class="btn btn-line" id="fCalc" type="button">🧮 ডে-বোর্ডিং মোট নিজে হিসাব করুন</button>
+          <button class="btn btn-line" id="fReset" type="button">↩ আসল ফিতে ফেরান</button>
+        </div><div class="msg" id="fMsg"></div>
+      </div>
+      <div class="box"><h3>👁️ সাইটে যেমন দেখাবে (ডে-বোর্ডিং)</h3><div id="fPrev"></div></div>
+    </div>
+
     <div class="panel" id="p-users">
       <div class="box"><h3>➕ নতুন শিক্ষকের লগইন তৈরি করুন</h3>
         <p class="nolink" style="margin-bottom:10px">নাম, ইমেইল ও একটি পাসওয়ার্ড দিন। অ্যাকাউন্ট সঙ্গে সঙ্গে চালু হবে। এরপর শিক্ষককে ইমেইল ও পাসওয়ার্ডটি জানিয়ে দিন।</p>
@@ -188,6 +229,8 @@
 
 <script src="config.js"></script>
 <script src="common.js"></script>
+<script src="result-card.js"></script>
+<script src="fees.js"></script>
 <script>
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -253,11 +296,11 @@ async function boot(){
   $("#whoName").textContent=prof.name||prof.email;
   $("#whoRole").textContent=prof.role==="admin"?"অ্যাডমিন":"শিক্ষক";
   const admin=prof.role==="admin";
-  const tabs=[["gallery","📷 গ্যালারি"],["notices","📢 নোটিশ"]].concat(admin?[["slides","🖼️ স্লাইডার"],["staff","👨‍🏫 শিক্ষকবৃন্দ"],["settings","⚙️ স্কুলের তথ্য"],["adm","📋 ভর্তির আবেদন"],["users","👥 অ্যাকাউন্ট"]]:[]);
+  const tabs=[["gallery","📷 গ্যালারি"],["notices","📢 নোটিশ"],["results","📝 ফলাফল"]].concat(admin?[["slides","🖼️ স্লাইডার"],["staff","👨‍🏫 শিক্ষকবৃন্দ"],["fees","💰 ফি"],["settings","⚙️ স্কুলের তথ্য"],["adm","📋 ভর্তির আবেদন"],["users","👥 অ্যাকাউন্ট"]]:[]);
   $("#dtabs").innerHTML=tabs.map((t,i)=>`<button data-t="${t[0]}" class="${i?"":"on"}">${t[1]}</button>`).join("");
   $$("#dtabs button").forEach(b=>b.onclick=()=>openTab(b.dataset.t));
   openTab("gallery");}
-const loaders={gallery:loadGallery,notices:loadNotices,slides:loadSlides,staff:loadStaff,settings:loadSettings,adm:loadAdm,users:loadUsers};
+const loaders={gallery:loadGallery,notices:loadNotices,slides:loadSlides,staff:loadStaff,settings:loadSettings,adm:loadAdm,users:loadUsers,results:()=>loadResults(),fees:()=>loadFees()};
 function openTab(t){$$("#dtabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));
   $$(".panel").forEach(p=>p.classList.toggle("on",p.id==="p-"+t));loaders[t]()}
 const isAdmin=()=>prof&&prof.role==="admin";
@@ -388,6 +431,7 @@ $("#cfgTest").onclick=async()=>{const m=$("#cfgMsg"),url=$("#cfgUrl").value.trim
     const c=window.supabase.createClient(url,key);const r=await c.from("settings").select("key").limit(1);
     if(r.error){const t=(r.error.code||"")+" "+(r.error.message||"");
       if(/42P01|PGRST205|does not exist|schema cache/i.test(t))return say(m,"সংযোগ হয়েছে কিন্তু টেবিল নেই। Supabase-এ supabase_setup.sql পুরোটা চালান (ধাপ ২), তারপর আবার পরীক্ষা করুন।");
+      if(/42501|permission denied/i.test(t))return say(m,"সংযোগ ঠিক আছে, কিন্তু টেবিলের অনুমতি (GRANT) দেওয়া হয়নি। নতুন supabase_setup.sql (বা LOGIN_SETUP.md-এর \"৪২৫০১ ত্রুটি\" অংশের ছোট কোড) Supabase-এর SQL Editor-এ চালান, তারপর আবার পরীক্ষা করুন।");
       if(/api key|JWT|apikey/i.test(t))return say(m,"anon key ভুল। Settings → API থেকে আবার কপি করুন।");
       return say(m,"সমস্যা: "+t)}
     say(m,"✓ সংযোগ সফল!",true);
@@ -398,8 +442,8 @@ $("#cfgCopy").onclick=async()=>{try{await navigator.clipboard.writeText($("#cfgT
 (async()=>{client=await dbReady;if(!client)return show("setup");
   client.auth.onAuthStateChange(()=>{});boot()})();
 </script>
-<script src="admin-fees.js"></script>
 <script src="admin-results.js"></script>
-  <script src="admin-lock.js"></script>
+<script src="admin-fees.js"></script>
+<script src="admin-lock.js"></script>
 </body>
 </html>
